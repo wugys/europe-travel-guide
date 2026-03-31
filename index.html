@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇪🇺 歐洲旅行隨身導遊 | Europe Travel Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="images/icon-192x192.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🇪🇺 歐洲旅行隨身導遊</h1>
+                <div class="current-date" id="current-date"></div>
+                <div class="trip-info">
+                    <span id="trip-day-info">計算中...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-view="today">
+                📅 今日行程
+            </button>
+            <button class="nav-tab" data-view="full">
+                🗺️ 全部行程
+            </button>
+            <button class="nav-tab" data-view="spots">
+                🏛️ 景點詳情
+            </button>
+            <button class="nav-tab" data-view="tips">
+                💡 實用提醒
+            </button>
+            <button class="nav-tab" data-view="checklist">
+                ✅ 行前清單
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- View: Today (Default) -->
+            <section id="view-today" class="view active">
+                <div class="section-header">
+                    <h2>📅 今日行程</h2>
+                    <div class="date-display" id="today-date-display"></div>
+                </div>
+                <div id="today-content" class="content-area">
+                    <div class="loading">載入中...</div>
+                </div>
+            </section>
+
+            <!-- View: Full Itinerary -->
+            <section id="view-full" class="view">
+                <div class="section-header">
+                    <h2>🗺️ 完整行程規劃</h2>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">全部</button>
+                        <button class="filter-btn" data-filter="austria">🇦🇹 奧地利</button>
+                        <button class="filter-btn" data-filter="slovakia">🇸🇰 斯洛伐克</button>
+                        <button class="filter-btn" data-filter="czech">🇨🇿 捷克</button>
+                        <button class="filter-btn" data-filter="germany">🇩🇪 德國</button>
+                    </div>
+                </div>
+                <div id="full-itinerary" class="content-area">
+                    <div class="loading">載入中...</div>
+                </div>
+            </section>
+
+            <!-- View: Attractions -->
+            <section id="view-spots" class="view">
+                <div class="section-header">
+                    <h2>🏛️ 景點詳細介紹</h2>
+                    <input type="text" id="spot-search" placeholder="🔍 搜尋景點..." class="search-input">
+                </div>
+                <div id="spots-content" class="content-area">
+                    <div class="loading">載入中...</div>
+                </div>
+            </section>
+
+            <!-- View: Tips -->
+            <section id="view-tips" class="view">
+                <div class="section-header">
+                    <h2>💡 實用提醒</h2>
+                </div>
+                <div id="tips-content" class="content-area">
+                    <div class="tips-grid">
+                        <div class="tip-card" data-tip="luggage">
+                            <div class="tip-icon">🎒</div>
+                            <h3>行李準備</h3>
+                            <div class="tip-content" id="tip-luggage"></div>
+                        </div>
+                        <div class="tip-card" data-tip="food">
+                            <div class="tip-icon">🍽️</div>
+                            <h3>飲食建議</h3>
+                            <div class="tip-content" id="tip-food"></div>
+                        </div>
+                        <div class="tip-card" data-tip="money">
+                            <div class="tip-icon">💰</div>
+                            <h3>金錢與支付</h3>
+                            <div class="tip-content" id="tip-money"></div>
+                        </div>
+                        <div class="tip-card" data-tip="health">
+                            <div class="tip-icon">🏥</div>
+                            <h3>健康與安全</h3>
+                            <div class="tip-content" id="tip-health"></div>
+                        </div>
+                        <div class="tip-card" data-tip="photo">
+                            <div class="tip-icon">📸</div>
+                            <h3>拍照技巧</h3>
+                            <div class="tip-content" id="tip-photo"></div>
+                        </div>
+                        <div class="tip-card" data-tip="culture">
+                            <div class="tip-icon">🙏</div>
+                            <h3>文化禮儀</h3>
+                            <div class="tip-content" id="tip-culture"></div>
+                        </div>
+                        <div class="tip-card" data-tip="transport">
+                            <div class="tip-icon">🚇</div>
+                            <h3>交通與移動</h3>
+                            <div class="tip-content" id="tip-transport"></div>
+                        </div>
+                        <div class="tip-card" data-tip="special">
+                            <div class="tip-icon">⚠️</div>
+                            <h3>特殊提醒</h3>
+                            <div class="tip-content" id="tip-special"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Checklist -->
+            <section id="view-checklist" class="view">
+                <div class="section-header">
+                    <h2>✅ 行前準備清單</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="checklist-progress"></div>
+                        <span class="progress-text" id="checklist-progress-text">0%</span>
+                    </div>
+                </div>
+                <div id="checklist-content" class="content-area">
+                    <div class="checklist-section" id="checklist-documents">
+                        <h3>📄 證件與文件</h3>
+                        <div class="checklist-items" id="documents-items"></div>
+                    </div>
+                    <div class="checklist-section" id="checklist-luggage">
+                        <h3>🎒 行李物品</h3>
+                        <div class="checklist-items" id="luggage-items"></div>
+                    </div>
+                    <div class="checklist-section" id="checklist-electronics">
+                        <h3>🔌 電子用品</h3>
+                        <div class="checklist-items" id="electronics-items"></div>
+                    </div>
+                    <div class="checklist-section" id="checklist-health">
+                        <h3>💊 健康藥品</h3>
+                        <div class="checklist-items" id="health-items"></div>
+                    </div>
+                    <div class="checklist-section" id="checklist-money">
+                        <h3>💳 財務準備</h3>
+                        <div class="checklist-items" id="money-items"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Quick Actions FAB -->
+        <div class="fab-container">
+            <button class="fab-main" id="fab-menu">☰</button>
+            <div class="fab-actions" id="fab-actions">
+                <button class="fab-action" onclick="scrollToTop()">⬆️ 回到頂部</button>
+                <button class="fab-action" onclick="showEmergencyInfo()">🆘 緊急資訊</button>
+                <button class="fab-action" onclick="toggleOfflineMode()">📴 離線模式</button>
+            </div>
+        </div>
+
+        <!-- Modal for details -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <div id="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data/itinerary.js"></script>
+    <script src="data/attractions.js"></script>
+    <script src="data/tips.js"></script>
+    <script src="data/checklist.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+    </script>
+</body>
+</html>
