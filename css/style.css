@@ -61,6 +61,134 @@ body {
     opacity: 0.9;
 }
 
+/* Flight Info Card */
+.flight-info-card {
+    background: var(--card-bg);
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.flight-info-header {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.flight-info-header:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+}
+
+.flight-toggle {
+    transition: transform 0.3s;
+}
+
+.flight-info-card.collapsed .flight-toggle {
+    transform: rotate(-90deg);
+}
+
+.flight-info-content {
+    padding: 20px;
+    display: block;
+}
+
+.flight-info-card.collapsed .flight-info-content {
+    display: none;
+}
+
+.flight-section {
+    margin-bottom: 24px;
+}
+
+.flight-section:last-of-type {
+    margin-bottom: 16px;
+}
+
+.flight-section h4 {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.flight-item {
+    background: var(--bg-color);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.flight-item:last-child {
+    margin-bottom: 0;
+}
+
+.flight-number {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.flight-date {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.flight-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.flight-departure, .flight-arrival {
+    flex: 1;
+}
+
+.flight-time {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.flight-airport {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.flight-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.flight-duration {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.flight-leader {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
 /* Navigation */
 .nav-tabs {
     display: flex;

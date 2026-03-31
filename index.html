@@ -24,6 +24,27 @@
             </div>
         </header>
 
+        <!-- Flight Info Card -->
+        <div class="flight-info-card" id="flight-info-card">
+            <div class="flight-info-header" onclick="toggleFlightInfo()">
+                <span>✈️ 班機資訊</span>
+                <span class="flight-toggle">▼</span>
+            </div>
+            <div class="flight-info-content" id="flight-info-content">
+                <div class="flight-section">
+                    <h4>🛫 去程</h4>
+                    <div id="outbound-flights"></div>
+                </div>
+                <div class="flight-section">
+                    <h4>🛬 回程</h4>
+                    <div id="return-flights"></div>
+                </div>
+                <div class="flight-leader">
+                    <strong>領隊：</strong>林孜璟 📞 +886 0913573121
+                </div>
+            </div>
+        </div>
+
         <!-- Navigation Tabs -->
         <nav class="nav-tabs">
             <button class="nav-tab active" data-view="today">

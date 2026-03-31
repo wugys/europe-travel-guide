@@ -18,6 +18,9 @@ function initApp() {
     // 設定日期顯示
     updateDateDisplay();
     
+    // 載入航班資訊
+    loadFlightInfo();
+    
     // 載入每日行程
     loadTodayItinerary();
     
@@ -38,6 +41,56 @@ function initApp() {
     
     // 檢查網路狀態
     checkOnlineStatus();
+}
+
+// 載入航班資訊
+function loadFlightInfo() {
+    const outboundContainer = document.getElementById('outbound-flights');
+    const returnContainer = document.getElementById('return-flights');
+    
+    // 去程航班
+    let outboundHtml = '';
+    FLIGHT_INFO.outbound.forEach(flight => {
+        outboundHtml += renderFlightItem(flight);
+    });
+    outboundContainer.innerHTML = outboundHtml;
+    
+    // 回程航班
+    let returnHtml = '';
+    FLIGHT_INFO.return.forEach(flight => {
+        returnHtml += renderFlightItem(flight);
+    });
+    returnContainer.innerHTML = returnHtml;
+}
+
+// 渲染單一班機資訊
+function renderFlightItem(flight) {
+    return `
+        <div class="flight-item">
+            <div class="flight-number">${flight.flight}</div>
+            <div class="flight-date">${flight.date}</div>
+            <div class="flight-route">
+                <div class="flight-departure">
+                    <div class="flight-time">${flight.depTime}</div>
+                    <div class="flight-airport">${flight.depAirport}</div>
+                </div>
+                <div class="flight-arrow">
+                    ✈️
+                    <span class="flight-duration">${flight.duration}</span>
+                </div>
+                <div class="flight-arrival" style="text-align: right;">
+                    <div class="flight-time">${flight.arrTime}</div>
+                    <div class="flight-airport">${flight.arrAirport}</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// 切換航班資訊顯示/隱藏
+function toggleFlightInfo() {
+    const card = document.getElementById('flight-info-card');
+    card.classList.toggle('collapsed');
 }
 
 // 更新日期顯示
