@@ -1,12 +1,13 @@
 /**
- * 歐洲旅行導遊 - 主要應用程式
+ * 歐洲旅行導遊 - 主要應用程式 (Supabase 版本)
  */
 
 // 全局狀態
 const AppState = {
     currentView: 'today',
     checklistProgress: {},
-    isOffline: false
+    isOffline: false,
+    dataLoaded: false
 };
 
 // 初始化應用程式
@@ -14,53 +15,89 @@ document.addEventListener('DOMContentLoaded', function() {
     initApp();
 });
 
-function initApp() {
+async function initApp() {
     // 設定日期顯示
     updateDateDisplay();
     
     // 載入航班資訊
-    loadFlightInfo();
+    await loadFlightInfo();
     
     // 載入每日行程
-    loadTodayItinerary();
+    await loadTodayItinerary();
     
     // 載入完整行程
-    loadFullItinerary();
+    await loadFullItinerary();
     
     // 載入景點
-    loadAttractions();
+    await loadAttractions();
     
     // 載入提醒
-    loadTips();
+    await loadTips();
     
     // 載入清單
-    loadChecklist();
+    await loadChecklist();
     
     // 設定事件監聽
     setupEventListeners();
     
     // 檢查網路狀態
     checkOnlineStatus();
+    
+    AppState.dataLoaded = true;
 }
 
 // 載入航班資訊
-function loadFlightInfo() {
+async function loadFlightInfo() {
     const outboundContainer = document.getElementById('outbound-flights');
     const returnContainer = document.getElementById('return-flights');
     
-    // 去程航班
-    let outboundHtml = '';
-    FLIGHT_INFO.outbound.forEach(flight => {
-        outboundHtml += renderFlightItem(flight);
-    });
-    outboundContainer.innerHTML = outboundHtml;
+    if (!outboundContainer || !returnContainer) return;
     
-    // 回程航班
-    let returnHtml = '';
-    FLIGHT_INFO.return.forEach(flight => {
-        returnHtml += renderFlightItem(flight);
-    });
-    returnContainer.innerHTML = returnHtml;
+    try {
+        // 嘗試從 Supabase 載入
+        if (window.SupabaseDB && window.SupabaseDB.cache.tripInfo) {
+            const flights = window.SupabaseDB.cache.flights;
+            
+            let outboundHtml = '';
+            flights.outbound.forEach(flight => {
+                outboundHtml += renderFlightItem(flight);
+            });
+            outboundContainer.innerHTML = outboundHtml;
+            
+            let returnHtml = '';
+            flights.return.forEach(flight => {
+                returnHtml += renderFlightItem(flight);
+            });
+            returnContainer.innerHTML = returnHtml;
+        } else {
+            // 使用本地資料
+            let outboundHtml = '';
+            FLIGHT_INFO.outbound.forEach(flight => {
+                outboundHtml += renderFlightItem(flight);
+            });
+            outboundContainer.innerHTML = outboundHtml;
+            
+            let returnHtml = '';
+            FLIGHT_INFO.return.forEach(flight => {
+                returnHtml += renderFlightItem(flight);
+            });
+            returnContainer.innerHTML = returnHtml;
+        }
+    } catch (error) {
+        console.error('Error loading flights:', error);
+        // 使用本地資料作為備援
+        let outboundHtml = '';
+        FLIGHT_INFO.outbound.forEach(flight => {
+            outboundHtml += renderFlightItem(flight);
+        });
+        outboundContainer.innerHTML = outboundHtml;
+        
+        let returnHtml = '';
+        FLIGHT_INFO.return.forEach(flight => {
+            returnHtml += renderFlightItem(flight);
+        });
+        returnContainer.innerHTML = returnHtml;
+    }
 }
 
 // 渲染單一班機資訊
@@ -132,7 +169,29 @@ function updateTripDayInfo() {
 }
 
 // 載入今日行程
-function loadTodayItinerary() {
+async function loadTodayItinerary() {
+    const container = document.getElementById('today-content');
+    if (!container) return;
+    
+    try {
+        // 嘗試從 Supabase 載入
+        if (window.SupabaseDB) {
+            const todayData = await window.SupabaseDB.getTodayItinerary();
+            
+            if (todayData.isBeforeTrip || todayData.isAfterTrip) {
+                container.innerHTML = renderNoTripMessage(new Date(), todayData.message);
+            } else if (todayData) {
+                container.innerHTML = renderDayCard(todayData, true);
+            } else {
+                container.innerHTML = renderNoTripMessage(new Date());
+            }
+            return;
+        }
+    } catch (error) {
+        console.error('Error loading from Supabase:', error);
+    }
+    
+    // 使用本地資料作為備援
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
@@ -142,18 +201,26 @@ function loadTodayItinerary() {
         return dayDate.getTime() === today.getTime();
     });
     
-    const container = document.getElementById('today-content');
-    
     if (todayData) {
         container.innerHTML = renderDayCard(todayData, true);
     } else {
-        // 沒有行程
         container.innerHTML = renderNoTripMessage(today);
     }
 }
 
 // 渲染無行程訊息
-function renderNoTripMessage(today) {
+function renderNoTripMessage(today, customMessage = null) {
+    if (customMessage) {
+        return `
+            <div class="day-card">
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 16px;">🗓️</div>
+                    <p style="font-size: 1.1rem; color: var(--text-secondary);">${customMessage}</p>
+                </div>
+            </div>
+        `;
+    }
+    
     const startDate = new Date(TRIP_INFO.startDate);
     const endDate = new Date(TRIP_INFO.endDate);
     
@@ -179,13 +246,31 @@ function renderNoTripMessage(today) {
 }
 
 // 載入完整行程
-function loadFullItinerary() {
+async function loadFullItinerary() {
     const container = document.getElementById('full-itinerary');
+    if (!container) return;
     
     let html = '';
-    ITINERARY_DATA.forEach(day => {
-        html += renderDayCard(day, false);
-    });
+    
+    try {
+        // 嘗試從 Supabase 載入
+        if (window.SupabaseDB && window.SupabaseDB.cache.itineraryDays.length > 0) {
+            window.SupabaseDB.cache.itineraryDays.forEach(day => {
+                html += renderDayCard(day, false);
+            });
+        } else {
+            // 使用本地資料
+            ITINERARY_DATA.forEach(day => {
+                html += renderDayCard(day, false);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading full itinerary:', error);
+        // 使用本地資料
+        ITINERARY_DATA.forEach(day => {
+            html += renderDayCard(day, false);
+        });
+    }
     
     container.innerHTML = html;
 }
@@ -256,13 +341,31 @@ function formatDate(dateStr) {
 }
 
 // 載入景點
-function loadAttractions() {
+async function loadAttractions() {
     const container = document.getElementById('spots-content');
+    if (!container) return;
     
     let html = '';
-    ATTRACTIONS_DATA.forEach(spot => {
-        html += renderAttractionCard(spot);
-    });
+    
+    try {
+        // 嘗試從 Supabase 載入
+        if (window.SupabaseDB && window.SupabaseDB.cache.attractions.length > 0) {
+            window.SupabaseDB.cache.attractions.forEach(spot => {
+                html += renderAttractionCard(spot);
+            });
+        } else {
+            // 使用本地資料
+            ATTRACTIONS_DATA.forEach(spot => {
+                html += renderAttractionCard(spot);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading attractions:', error);
+        // 使用本地資料
+        ATTRACTIONS_DATA.forEach(spot => {
+            html += renderAttractionCard(spot);
+        });
+    }
     
     container.innerHTML = html;
 }
@@ -326,7 +429,44 @@ function getCountryName(code) {
 }
 
 // 載入提醒
-function loadTips() {
+async function loadTips() {
+    try {
+        // 嘗試從 Supabase 載入
+        if (window.SupabaseDB && window.SupabaseDB.cache.tipCategories.length > 0) {
+            window.SupabaseDB.cache.tipCategories.forEach(tip => {
+                const container = document.getElementById(`tip-${tip.category_key}`);
+                if (container && tip.items) {
+                    let html = '';
+                    
+                    // 按 subcategory 分組
+                    const groupedItems = {};
+                    tip.items.forEach(item => {
+                        const subcategory = item.subcategory || '一般';
+                        if (!groupedItems[subcategory]) {
+                            groupedItems[subcategory] = [];
+                        }
+                        groupedItems[subcategory].push(item.tip_text);
+                    });
+                    
+                    for (const [category, tips] of Object.entries(groupedItems)) {
+                        html += `<div style="margin-bottom: 16px;">`;
+                        html += `<h4 style="color: var(--primary-color); margin-bottom: 8px;">${category}</h4>`;
+                        html += `<ul>`;
+                        tips.forEach(t => {
+                            html += `<li>${t}</li>`;
+                        });
+                        html += `</ul></div>`;
+                    }
+                    container.innerHTML = html;
+                }
+            });
+            return;
+        }
+    } catch (error) {
+        console.error('Error loading tips from Supabase:', error);
+    }
+    
+    // 使用本地資料
     Object.keys(TRAVEL_TIPS).forEach(key => {
         const tip = TRAVEL_TIPS[key];
         const container = document.getElementById(`tip-${key}`);
@@ -347,14 +487,42 @@ function loadTips() {
 }
 
 // 載入清單
-function loadChecklist() {
+async function loadChecklist() {
     // 從 localStorage 載入進度
     const saved = localStorage.getItem('travel-checklist');
     if (saved) {
         AppState.checklistProgress = JSON.parse(saved);
     }
     
-    // 渲染各類別
+    try {
+        // 嘗試從 Supabase 載入
+        if (window.SupabaseDB && window.SupabaseDB.cache.checklistCategories.length > 0) {
+            window.SupabaseDB.cache.checklistCategories.forEach(cat => {
+                const container = document.getElementById(`${cat.category_key}-items`);
+                if (container && cat.items) {
+                    let html = '';
+                    cat.items.forEach((item, index) => {
+                        const itemId = `db-${cat.category_key}-${index}`;
+                        const isChecked = AppState.checklistProgress[itemId] || false;
+                        html += `
+                            <div class="checklist-item ${isChecked ? 'checked' : ''}" data-id="${itemId}">
+                                <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleChecklistItem('${itemId}')">
+                                <span class="item-text">${item.item_text || item.text}</span>
+                                ${item.important ? '<span class="item-important">重要</span>' : ''}
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                }
+            });
+            updateChecklistProgress();
+            return;
+        }
+    } catch (error) {
+        console.error('Error loading checklist from Supabase:', error);
+    }
+    
+    // 使用本地資料
     Object.keys(CHECKLIST_DATA).forEach(key => {
         const category = CHECKLIST_DATA[key];
         const container = document.getElementById(`${key}-items`);
@@ -396,15 +564,30 @@ function toggleChecklistItem(itemId) {
 
 // 更新清單進度
 function updateChecklistProgress() {
-    const total = Object.keys(CHECKLIST_DATA).reduce((sum, key) => {
-        return sum + CHECKLIST_DATA[key].items.length;
-    }, 0);
+    let total = 0;
+    
+    // 嘗試從 Supabase 快取計算總數
+    if (window.SupabaseDB && window.SupabaseDB.cache.checklistCategories.length > 0) {
+        window.SupabaseDB.cache.checklistCategories.forEach(cat => {
+            if (cat.items) {
+                total += cat.items.length;
+            }
+        });
+    } else {
+        // 使用本地資料
+        total = Object.keys(CHECKLIST_DATA).reduce((sum, key) => {
+            return sum + CHECKLIST_DATA[key].items.length;
+        }, 0);
+    }
     
     const checked = Object.values(AppState.checklistProgress).filter(v => v).length;
-    const percent = Math.round((checked / total) * 100);
+    const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
     
-    document.getElementById('checklist-progress').style.width = `${percent}%`;
-    document.getElementById('checklist-progress-text').textContent = `${percent}%`;
+    const progressBar = document.getElementById('checklist-progress');
+    const progressText = document.getElementById('checklist-progress-text');
+    
+    if (progressBar) progressBar.style.width = `${percent}%`;
+    if (progressText) progressText.textContent = `${percent}%`;
 }
 
 // 設定事件監聽
