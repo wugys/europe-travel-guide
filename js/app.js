@@ -685,12 +685,59 @@ document.addEventListener('DOMContentLoaded', async function() {
         AppState.initialized = true;
         console.log('✅ Europe Travel Guide v3.0 ready');
         
+        // Bind bottom nav buttons explicitly
+        bindBottomNavButtons();
+        
     } catch (error) {
         console.error('❌ Initialization error:', error);
         // Even if some modules fail, we can still show the basic UI
         loadHomeData();
+        // Still bind buttons even if init fails
+        bindBottomNavButtons();
     }
 });
+
+/**
+ * Bind bottom nav buttons - handles both click and touch
+ */
+function bindBottomNavButtons() {
+    console.log('[App] Binding bottom nav buttons...');
+    
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        const page = btn.dataset.page;
+        if (!page) return;
+        
+        // Remove existing listeners to avoid duplicates
+        btn.removeEventListener('click', handleNavClick);
+        btn.removeEventListener('touchend', handleNavTouch);
+        
+        // Add click listener
+        btn.addEventListener('click', handleNavClick);
+        
+        // Add touch listener for mobile
+        btn.addEventListener('touchend', handleNavTouch);
+        
+        console.log(`[App] Bound nav button: ${page}`);
+    });
+}
+
+function handleNavClick(e) {
+    e.preventDefault();
+    const page = this.dataset.page;
+    if (page) {
+        console.log(`[App] Nav click: ${page}`);
+        navigateTo(page);
+    }
+}
+
+function handleNavTouch(e) {
+    e.preventDefault();
+    const page = this.dataset.page;
+    if (page) {
+        console.log(`[App] Nav touch: ${page}`);
+        navigateTo(page);
+    }
+}
 
 // Handle browser back button
 window.addEventListener('popstate', function(e) {
@@ -781,3 +828,6 @@ window.speakAIGuide = speakAIGuide;
 window.completeActivity = completeActivity;
 window.updateBottomNav = updateBottomNav;
 window.loadPageData = loadPageData;
+window.bindBottomNavButtons = bindBottomNavButtons;
+window.handleNavClick = handleNavClick;
+window.handleNavTouch = handleNavTouch;
