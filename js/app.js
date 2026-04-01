@@ -682,6 +682,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log('✅ UserProfile initialized');
         }
         
+        // 16. Initialize AI Router (v3.0)
+        if (typeof AIRouter !== 'undefined') {
+            await AIRouter.init();
+            console.log('✅ AIRouter initialized');
+            
+            // Listen for AI responses
+            window.addEventListener('ai:response', (e) => {
+                console.log('[App] AI Response received:', e.detail);
+                handleAIResponse(e.detail);
+            });
+            
+            // Listen for AI errors
+            window.addEventListener('ai:error', (e) => {
+                console.error('[App] AI Error:', e.detail);
+                showAIError(e.detail);
+            });
+        }
+        
+        // 17. Initialize enhanced AI Guide with LLM support
+        initEnhancedAIGuide();
+        
         AppState.initialized = true;
         console.log('✅ Europe Travel Guide v3.0 ready');
         
@@ -817,6 +838,122 @@ async function completeActivity(activityId) {
         const suggestion = await AIGuide.evaluateAndSuggest(true);
         updateAIGuideCard(suggestion);
     }
+}
+
+// ============================================
+// AI ROUTER INTEGRATION (v3.0)
+// ============================================
+function initEnhancedAIGuide() {
+    console.log('[App] Initializing enhanced AI Guide with LLM support...');
+    
+    // Override AIGuide to use LLM when available
+    if (typeof AIGuide !== 'undefined' && typeof AIRouter !== 'undefined') {
+        // Store original method
+        AIGuide._originalEvaluate = AIGuide.evaluateAndSuggest;
+        
+        // Enhanced evaluation with LLM
+        AIGuide.evaluateAndSuggest = async function(force = false) {
+            // Check if user is premium and online
+            const canUseLLM = userProfile?.isPremium?.() && navigator.onLine;
+            
+            if (canUseLLM && AIRouter?.canMakeRequest?.('guide')) {
+                try {
+                    // Build context for LLM
+                    const context = this.buildContext();
+                    const userPrefs = userProfile?.getAIContext?.() || {};
+                    
+                    // Call LLM via AIRouter
+                    const response = await AIRouter.request('guide', {
+                        context,
+                        preferences: userPrefs,
+                        language: i18n?.getCurrentLanguage?.() || 'zh-TW'
+                    });
+                    
+                    if (response?.suggestion) {
+                        // Update cache and broadcast
+                        this.cacheSuggestion(response.suggestion);
+                        this.broadcastSuggestion(response.suggestion);
+                        return response.suggestion;
+                    }
+                } catch (error) {
+                    console.warn('[AIGuide] LLM request failed, falling back to rule-based:', error);
+                }
+            }
+            
+            // Fallback to original rule-based method
+            return this._originalEvaluate(force);
+        };
+    }
+}
+
+function handleAIResponse(response) {
+    // Handle different AI task responses
+    switch (response.task) {
+        case 'guide':
+            if (response.suggestion) {
+                updateAIGuideCard(response.suggestion);
+            }
+            break;
+        case 'planner':
+            // Handle itinerary generation response
+            if (response.itinerary) {
+                showGeneratedItinerary(response.itinerary);
+            }
+            break;
+        case 'chat':
+            // Handle chat response
+            if (response.message) {
+                appendChatMessage(response.message, 'ai');
+            }
+            break;
+        case 'content':
+            // Handle content generation
+            if (response.content) {
+                updateAttractionContent(response.attractionId, response.content);
+            }
+            break;
+    }
+}
+
+function showAIError(error) {
+    // Show user-friendly error message
+    const errorMessages = {
+        'rate_limit': i18n?.t?.('errors.rateLimit') || '已達使用限制，請稍後再試',
+        'network': i18n?.t?.('errors.networkError') || '網路連線異常',
+        'offline': i18n?.t?.('errors.offlineMode') || '目前處於離線模式',
+        'unauthorized': i18n?.t?.('errors.unauthorized') || '請先登入',
+        'default': i18n?.t?.('errors.aiError') || 'AI 服務暫時無法使用'
+    };
+    
+    const message = errorMessages[error.code] || errorMessages.default;
+    showNotification(message, 'error');
+}
+
+function showGeneratedItinerary(itinerary) {
+    // TODO: Implement itinerary display modal
+    console.log('[App] Generated itinerary:', itinerary);
+}
+
+function appendChatMessage(message, sender) {
+    // TODO: Implement chat UI
+    console.log(`[App] Chat [${sender}]:`, message);
+}
+
+function updateAttractionContent(attractionId, content) {
+    // Update attraction detail with generated content
+    console.log('[App] Updated content for', attractionId);
+}
+
+function showNotification(message, type = 'info') {
+    // Simple notification display
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
 // ============================================
