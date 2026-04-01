@@ -1,54 +1,71 @@
 {
-  "name": "🇪🇺 歐洲旅行隨身導遊",
+  "name": "Europe Travel | 奧捷斯匈",
   "short_name": "歐洲導遊",
-  "description": "東歐四國旅行隨身導遊 - 行程、景點、提醒、清單",
-  "start_url": ".",
+  "description": "奧捷斯匈10日遊隨身導遊系統 - 離線可用、GPS定位、智能提醒",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#f3f4f6",
-  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "theme_color": "#2C3E50",
   "orientation": "portrait",
-  "scope": ".",
+  "scope": "/",
+  "lang": "zh-TW",
   "icons": [
     {
-      "src": "images/icon-72x72.png",
+      "src": "icons/icon-72x72.png",
       "sizes": "72x72",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "images/icon-96x96.png",
+      "src": "icons/icon-96x96.png",
       "sizes": "96x96",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "images/icon-128x128.png",
+      "src": "icons/icon-128x128.png",
       "sizes": "128x128",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "images/icon-144x144.png",
+      "src": "icons/icon-144x144.png",
       "sizes": "144x144",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "images/icon-152x152.png",
+      "src": "icons/icon-152x152.png",
       "sizes": "152x152",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "images/icon-192x192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     },
     {
-      "src": "images/icon-384x384.png",
+      "src": "icons/icon-384x384.png",
       "sizes": "384x384",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "images/icon-512x512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["travel", "navigation"],
+  "screenshots": [
+    {
+      "src": "screenshots/home.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }

@@ -1242,3 +1242,453 @@ button:focus-visible,
     outline: 2px solid var(--primary);
     outline-offset: 2px;
 }
+
+/* ============================================
+   MAP STYLES
+   ============================================ */
+.map-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.map-container {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--bg-tertiary);
+}
+
+.map-controls {
+    position: absolute;
+    bottom: calc(var(--nav-height) + var(--space-lg));
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--space-sm);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: var(--space-xs);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+}
+
+.map-layer-btn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.map-layer-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+.map-layer-btn:active {
+    transform: scale(0.95);
+}
+
+.locate-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: var(--bg-secondary);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.locate-btn:active {
+    transform: scale(0.9);
+    background: var(--border-light);
+}
+
+/* Leaflet Custom Styles */
+.attraction-marker {
+    background: none;
+    border: none;
+}
+
+.marker-container {
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--primary);
+    transition: transform 0.2s;
+}
+
+.marker-today .marker-container {
+    background: var(--primary);
+    border-color: var(--accent);
+    transform: scale(1.2);
+}
+
+.marker-icon {
+    font-size: 16px;
+}
+
+.marker-today .marker-icon {
+    font-size: 18px;
+}
+
+.user-location-marker {
+    background: none;
+    border: none;
+}
+
+.user-marker-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.user-marker-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: #4ECDC4;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+    z-index: 2;
+}
+
+.user-marker-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background: rgba(78, 205, 196, 0.3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    z-index: 1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+.attraction-popup .leaflet-popup-content-wrapper {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+}
+
+.attraction-popup .leaflet-popup-content {
+    margin: 0;
+    padding: var(--space-md);
+}
+
+.map-popup {
+    text-align: center;
+    min-width: 200px;
+}
+
+.map-popup h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--text-primary);
+}
+
+.map-popup .popup-icon {
+    font-size: 32px;
+    margin-bottom: var(--space-xs);
+}
+
+.map-popup .popup-city {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.map-popup .popup-desc {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-sm);
+    line-height: 1.5;
+}
+
+.map-popup .popup-duration {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.popup-btn {
+    padding: 8px 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.popup-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* ============================================
+   NOTIFICATIONS & REMINDERS
+   ============================================ */
+#reminder-container {
+    position: fixed;
+    top: var(--space-lg);
+    left: var(--space-md);
+    right: var(--space-md);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    pointer-events: none;
+}
+
+.reminder-card {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    border-left: 4px solid var(--primary);
+}
+
+.reminder-card.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.reminder-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.reminder-type {
+    font-size: 20px;
+}
+
+.reminder-header h4 {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.reminder-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.reminder-close:hover {
+    background: var(--bg-tertiary);
+}
+
+.reminder-message {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+}
+
+.reminder-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.reminder-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid var(--border-light);
+    background: white;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.reminder-btn:first-child {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.reminder-btn:active {
+    transform: scale(0.98);
+}
+
+/* Offline Status Notification */
+.offline-notification,
+.update-notification {
+    position: fixed;
+    top: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: white;
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-xl);
+    z-index: 10001;
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 90%;
+    width: 320px;
+}
+
+.offline-notification.show,
+.update-notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.notification-icon {
+    font-size: 24px;
+}
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-text strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.notification-text span {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.notification-btn {
+    padding: 8px 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* ============================================
+   SETTINGS PAGE UPDATES
+   ============================================ */
+.setting-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.setting-btn:active {
+    background: var(--border-medium);
+    transform: scale(0.98);
+}
+
+#network-status.online {
+    color: var(--status-done);
+}
+
+#network-status.offline {
+    color: var(--accent-dark);
+}
+
+/* ============================================
+   FAVORITES BUTTON
+   ============================================ */
+.fav-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: var(--space-sm);
+    border-radius: var(--radius-full);
+    transition: all 0.2s;
+}
+
+.fav-btn:active {
+    transform: scale(0.9);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slideInUp 0.3s ease;
+}

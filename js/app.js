@@ -1,7 +1,6 @@
 /**
- * Europe Travel Guide v2.0
- * Mobile First | App-like Experience
- * Simple SPA Navigation
+ * Europe Travel Guide v2.1
+ * PWA + Offline + GPS + Reminders
  */
 
 // ============================================
@@ -10,8 +9,21 @@
 const AppState = {
     currentPage: 'home',
     currentDay: 1,
+    currentCity: '布達佩斯',
     favorites: [],
-    aiCardOpen: false
+    aiCardOpen: false,
+    mapFollowUser: false,
+    remindersEnabled: true
+};
+
+// 常數
+const STORES = {
+    ATTRACTIONS: 'attractions',
+    ITINERARY: 'itinerary',
+    FAVORITES: 'favorites',
+    REMINDERS: 'reminders',
+    USER_STATE: 'userState',
+    OFFLINE_TILES: 'offlineTiles'
 };
 
 // ============================================
@@ -43,6 +55,13 @@ function navigateTo(page) {
     
     // Load page data
     loadPageData(page);
+    
+    // Special handling for map page
+    if (page === 'map') {
+        setTimeout(() => {
+            MapModule.init('map-container');
+        }, 100);
+    }
 }
 
 function updateBottomNav(page) {
@@ -67,6 +86,12 @@ function loadPageData(page) {
             break;
         case 'attractions':
             loadAttractionsList();
+            break;
+        case 'favorites':
+            loadFavoritesList();
+            break;
+        case 'settings':
+            loadSettingsData();
             break;
     }
 }
@@ -93,7 +118,9 @@ function loadHomeData() {
     if (todayData) {
         const cityElement = document.getElementById('current-city');
         if (cityElement && todayData.route) {
-            cityElement.textContent = todayData.route[todayData.route.length - 1] || '布達佩斯';
+            const city = todayData.route[todayData.route.length - 1] || '布達佩斯';
+            cityElement.textContent = city;
+            AppState.currentCity = city;
         }
         
         // Update AI guide content
@@ -105,7 +132,6 @@ function loadHomeData() {
 }
 
 function updateAiGuide(dayData) {
-    // Simple AI suggestions based on day
     const suggestions = {
         morning: getMorningSuggestion(dayData),
         next: getNextSuggestion(dayData),
@@ -126,6 +152,15 @@ function updateAiGuide(dayData) {
             suggestionDivs[2].querySelector('p').textContent = suggestions.reminder;
         }
     }
+    
+    // Update home page AI card
+    const aiNow = document.querySelector('.ai-now');
+    const aiNext = document.querySelector('.ai-next');
+    const aiReminder = document.querySelector('.ai-reminder span:last-child');
+    
+    if (aiNow) aiNow.textContent = `現在：${suggestions.morning}`;
+    if (aiNext) aiNext.textContent = `下一步：${suggestions.next}`;
+    if (aiReminder) aiReminder.textContent = suggestions.reminder;
 }
 
 function getMorningSuggestion(dayData) {
@@ -156,7 +191,6 @@ function getReminder(dayData) {
 }
 
 function updateNextStop(dayData) {
-    // Find next attraction
     const attractionActivity = dayData.activities?.find(a => a.type === 'attraction');
     
     if (attractionActivity) {
@@ -217,13 +251,11 @@ function loadTodayData() {
 }
 
 function getActivityStatus(timeStr, index) {
-    // Simple logic: compare with current time
     const now = new Date();
     const [hours, minutes] = timeStr.split(':').map(Number);
     const activityTime = new Date();
     activityTime.setHours(hours, minutes, 0);
     
-    // Add 1 hour buffer for "active" status
     const bufferTime = new Date(activityTime.getTime() + 60 * 60 * 1000);
     
     if (now > bufferTime) {
@@ -244,7 +276,6 @@ function getStatusText(status) {
 }
 
 function getDuration(activity) {
-    // Default durations based on type
     const durations = {
         transport: '1-2小時',
         attraction: '1-3小時',
@@ -265,8 +296,8 @@ function getTypeLabel(type) {
 }
 
 function showActivityDetail(day, activityIndex) {
-    // For now, just log. In Phase 2, this can open a modal
     console.log('Activity clicked:', day, activityIndex);
+    // Future: Show activity detail modal
 }
 
 // ============================================
@@ -278,23 +309,23 @@ function loadAttractionsList() {
     const container = document.getElementById('attractions-list');
     if (!container) return;
     
-    // Filter attractions
     const filtered = currentFilter === 'all' 
         ? ATTRACTIONS_DATA 
         : ATTRACTIONS_DATA.filter(a => a.country === currentFilter);
     
-    // Generate list
     let html = '';
     filtered.forEach(attraction => {
         html += `
-            <div class="attraction-item" onclick="showAttractionDetail('${attraction.id}')"
-            >
+            <div class="attraction-item" onclick="showAttractionDetail('${attraction.id}')">
                 <div class="attraction-thumb">${attraction.icon}</div>
                 <div class="attraction-info">
                     <h3>${attraction.name}</h3>
                     <p>${truncateText(attraction.description, 40)}</p>
                     <span class="location">📍 ${attraction.city}</span>
                 </div>
+                <button class="fav-btn" onclick="event.stopPropagation(); toggleFavorite('${attraction.id}')">
+                    ${AppState.favorites.includes(attraction.id) ? '❤️' : '🤍'}
+                </button>
             </div>
         `;
     });
@@ -305,13 +336,11 @@ function loadAttractionsList() {
 // Filter chip click handlers
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('filter-chip')) {
-        // Update active state
         document.querySelectorAll('.filter-chip').forEach(chip => {
             chip.classList.remove('active');
         });
         e.target.classList.add('active');
         
-        // Update filter and reload
         currentFilter = e.target.dataset.filter;
         loadAttractionsList();
     }
@@ -324,19 +353,16 @@ function showAttractionDetail(attractionId) {
     const attraction = ATTRACTIONS_DATA.find(a => a.id === attractionId);
     if (!attraction) return;
     
-    // Populate detail page
     document.getElementById('attraction-country').textContent = getCountryName(attraction.country);
     document.getElementById('attraction-name').textContent = attraction.name;
     document.getElementById('attraction-tagline').textContent = attraction.description;
     document.getElementById('attraction-duration').textContent = `建議停留 ${attraction.tips?.duration || '1-2小時'}`;
     
-    // Hero icon
     const heroPlaceholder = document.querySelector('.hero-placeholder');
     if (heroPlaceholder) {
         heroPlaceholder.textContent = attraction.icon;
     }
     
-    // Highlights
     const highlightsList = document.getElementById('attraction-highlights');
     if (highlightsList && attraction.highlights) {
         highlightsList.innerHTML = attraction.highlights
@@ -345,13 +371,11 @@ function showAttractionDetail(attractionId) {
             .join('');
     }
     
-    // Best experience
     const experienceEl = document.getElementById('attraction-experience');
     if (experienceEl && attraction.secrets?.localTips) {
         experienceEl.textContent = attraction.secrets.localTips[0] || attraction.description;
     }
     
-    // Tips
     const tipsGrid = document.getElementById('attraction-tips');
     if (tipsGrid && attraction.tips) {
         tipsGrid.innerHTML = `
@@ -372,7 +396,6 @@ function showAttractionDetail(attractionId) {
         `;
     }
     
-    // Photo guide
     const photoList = document.getElementById('attraction-photos');
     if (photoList && attraction.secrets?.photoGuide) {
         photoList.innerHTML = attraction.secrets.photoGuide
@@ -380,7 +403,6 @@ function showAttractionDetail(attractionId) {
             .join('');
     }
     
-    // Navigate to detail page
     navigateTo('attraction-detail');
 }
 
@@ -393,6 +415,90 @@ function getCountryName(code) {
         germany: '德國'
     };
     return names[code] || code;
+}
+
+// ============================================
+// FAVORITES
+// ============================================
+async function toggleFavorite(attractionId) {
+    const isFav = await travelDB.toggleFavorite(attractionId);
+    
+    if (isFav) {
+        AppState.favorites.push(attractionId);
+        ReminderSystem.triggerReminder({
+            type: 'status',
+            title: '已收藏',
+            message: '景點已加入收藏清單',
+            priority: 'low'
+        });
+    } else {
+        AppState.favorites = AppState.favorites.filter(id => id !== attractionId);
+    }
+    
+    // Refresh current page if needed
+    if (AppState.currentPage === 'attractions') {
+        loadAttractionsList();
+    }
+}
+
+async function loadFavoritesList() {
+    const container = document.querySelector('.favorites-list');
+    if (!container) return;
+    
+    const favorites = await travelDB.getAllFavorites();
+    AppState.favorites = favorites.map(f => f.attractionId);
+    
+    if (favorites.length === 0) {
+        container.innerHTML = `
+            <div class="favorites-empty">
+                <div class="empty-icon">⭐</div>
+                <h2>還沒有收藏</h2>
+                <p>在景點頁面點擊愛心圖示即可收藏</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    for (const fav of favorites) {
+        const attraction = ATTRACTIONS_DATA.find(a => a.id === fav.attractionId);
+        if (attraction) {
+            html += `
+                <div class="attraction-item" onclick="showAttractionDetail('${attraction.id}')">
+                    <div class="attraction-thumb">${attraction.icon}</div>
+                    <div class="attraction-info">
+                        <h3>${attraction.name}</h3>
+                        <p>${truncateText(attraction.description, 40)}</p>
+                        <span class="location">📍 ${attraction.city}</span>
+                    </div>
+                    <button class="fav-btn" onclick="event.stopPropagation(); toggleFavorite('${attraction.id}')">❤️</button>
+                </div>
+            `;
+        }
+    }
+    container.innerHTML = html;
+}
+
+// ============================================
+// SETTINGS
+// ============================================
+function loadSettingsData() {
+    const networkStatus = document.getElementById('network-status');
+    const gpsStatus = document.getElementById('gps-status');
+    const syncStatus = document.getElementById('sync-status');
+    
+    if (networkStatus) {
+        networkStatus.textContent = OfflineModule.isOnline() ? '已連線' : '離線模式';
+        networkStatus.className = OfflineModule.isOnline() ? 'online' : 'offline';
+    }
+    
+    if (gpsStatus) {
+        gpsStatus.textContent = GPS.state.isTracking ? '定位中' : '未啟動';
+    }
+    
+    if (syncStatus) {
+        syncStatus.textContent = OfflineModule.isOnline() ? '同步完成' : '離線可用';
+    }
 }
 
 // ============================================
@@ -417,14 +523,12 @@ function toggleAiCard() {
 function updateTimeDisplay() {
     const now = new Date();
     
-    // Local time
     const localTimeStr = now.toLocaleTimeString('zh-TW', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false
     });
     
-    // Taipei time
     const taipeiTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Taipei"}));
     const taipeiTimeStr = taipeiTime.toLocaleTimeString('zh-TW', {
         hour: '2-digit',
@@ -432,7 +536,6 @@ function updateTimeDisplay() {
         hour12: false
     });
     
-    // Update display
     const localEl = document.getElementById('local-time');
     const taipeiEl = document.getElementById('taipei-time');
     
@@ -461,20 +564,41 @@ function truncateText(text, maxLength) {
 // ============================================
 // INITIALIZATION
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize time display
-    updateTimeDisplay();
-    setInterval(updateTimeDisplay, 1000);
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('✨ Europe Travel Guide v2.1 initializing...');
     
-    // Load initial page data
+    // 1. Initialize offline module (PWA + Service Worker)
+    await OfflineModule.init();
+    
+    // 2. Initialize time display
+    TimeModule.init();
+    
+    // 3. Initialize GPS
+    await GPS.init();
+    
+    // 4. Initialize reminders
+    await ReminderSystem.init();
+    
+    // 5. Load favorites
+    const favorites = await travelDB.getAllFavorites();
+    AppState.favorites = favorites.map(f => f.attractionId);
+    
+    // 6. Load initial page data
     loadHomeData();
     
-    console.log('✨ Europe Travel Guide v2.0 loaded');
+    // 7. Start GPS tracking
+    GPS.startTracking();
+    
+    // 8. Request notification permission
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+    
+    console.log('✅ Europe Travel Guide v2.1 ready');
 });
 
 // Handle browser back button
 window.addEventListener('popstate', function(e) {
-    // Simple back handling - go to home if not already there
     if (AppState.currentPage !== 'home') {
         navigateTo('home');
     }

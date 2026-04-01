@@ -206,21 +206,20 @@
             </div>
         </section>
         
-        <!-- ==================== PAGE: MAP (Placeholder) ==================== -->
+        <!-- ==================== PAGE: MAP ==================== -->
         <section id="page-map" class="page">
-            <header class="page-header">
+            <header class="page-header map-header">
                 <button class="back-btn" onclick="navigateTo('home')">←</button>
                 <h1>地圖</h1>
+                <button class="locate-btn" onclick="GPS.getCurrentPosition()" title="定位">📍</button>
             </header>
             
-            <div class="map-placeholder">
-                <div class="placeholder-icon">🗺️</div>
-                <h2>地圖功能開發中</h2>
-                <p>第二階段將加入離線地圖與 GPS 定位</p>
-                <div class="placeholder-note">
-                    <span>💡</span>
-                    <span>預留設計：Leaflet.js + OpenStreetMap + 離線快取</span>
-                </div>
+            <div class="map-container" id="map-container"></div>
+            
+            <div class="map-controls">
+                <button class="map-layer-btn active" onclick="MapModule.showLayer('today')">今日</button>
+                <button class="map-layer-btn" onclick="MapModule.showLayer('attractions')">全部</button>
+                <button class="map-layer-btn" onclick="MapModule.showLayer('favorites')">收藏</button>
             </div>
         </section>
         
@@ -261,24 +260,44 @@
                 </div>
                 
                 <div class="settings-section">
+                    <h3 class="section-label">系統狀態</h3>
+                    <div class="setting-item">
+                        <span class="setting-name">網路狀態</span>
+                        <span class="setting-value" id="network-status">檢查中...</span>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-name">GPS定位</span>
+                        <span class="setting-value" id="gps-status">未啟動</span>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-name">資料同步</span>
+                        <span class="setting-value" id="sync-status">離線可用</span>
+                    </div>
+                    <div class="setting-item">
+                        <button class="setting-btn" onclick="OfflineModule.syncData()">立即同步</button>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
                     <h3 class="section-label">關於</h3>
                     <div class="setting-item">
                         <span class="setting-name">版本</span>
-                        <span class="setting-value">v2.0 重構版</span>
+                        <span class="setting-value">v2.1 PWA版</span>
                     </div>
                     <div class="setting-item">
-                        <span class="setting-name">資料來源</span>
-                        <span class="setting-value">本地 JSON</span>
+                        <span class="setting-name">功能</span>
+                        <span class="setting-value">離線+GPS+提醒</span>
                     </div>
                 </div>
                 
                 <div class="settings-note">
-                    <p>💡 第二階段預計加入：</p>
+                    <p>✅ 已啟用功能：</p>
                     <ul>
-                        <li>Supabase 雲端同步</li>
-                        <li>離線地圖下載</li>
-                        <li>GPS 定位導航</li>
-                        <li>推播提醒</li>
+                        <li>✓ 離線瀏覽 (Service Worker)</li>
+                        <li>✓ GPS 定位追蹤</li>
+                        <li>✓ 互動式地圖</li>
+                        <li>✓ 智能提醒系統</li>
+                        <li>✓ 雙時區時間顯示</li>
                     </ul>
                 </div>
             </div>
@@ -342,12 +361,27 @@
         
     </div>
     
+    <!-- ==================== LEAFLET MAP ==================== -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    
     <!-- ==================== DATA SCRIPTS ==================== -->
     <script src="data/trip-info.js"></script>
     <script src="data/itinerary.js"></script>
     <script src="data/attractions.js"></script>
     
+    <!-- ==================== MODULES ==================== -->
+    <script src="js/modules/db.js"></script>
+    <script src="js/modules/offline.js"></script>
+    <script src="js/modules/gps.js"></script>
+    <script src="js/modules/map.js"></script>
+    <script src="js/modules/time.js"></script>
+    <script src="js/modules/reminder.js"></script>
+    
     <!-- ==================== APP SCRIPT ==================== -->
     <script src="js/app.js"></script>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
 </body>
 </html>
