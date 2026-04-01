@@ -15,8 +15,8 @@ const SUPABASE_URL = 'https://xbwibudbaqhxbuyjhouc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhid2lidWRiYXFoeGJ1eWpob3VjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NzI3ODQsImV4cCI6MjA5MDU0ODc4NH0.dPvnWaDrA0vJaR5rd6uuzEYbXSXyNjTi0GJMjke1Gr8';
 // ============================================
 
-// 全域 Supabase 客戶端
-let supabase = null;
+// 全域 Supabase 客戶端 - 使用不同名稱避免衝突
+let supabaseClient = null;
 
 // 是否啟用 Supabase（設為 false 可強制使用本地資料）
 const ENABLE_SUPABASE = true;
@@ -58,7 +58,7 @@ function initSupabase() {
     }
     
     try {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('Supabase initialized successfully');
         return true;
     } catch (error) {
@@ -86,9 +86,15 @@ async function loadAllData() {
         return DataCache;
     }
     
+    // 檢查 supabaseClient 是否已初始化
+    if (!supabaseClient) {
+        console.warn('Supabase client not initialized, using local data');
+        return loadLocalData();
+    }
+    
     try {
         // 載入行程基本資訊
-        const { data: tripInfo, error: tripError } = await supabase
+        const { data: tripInfo, error: tripError } = await supabaseClient
             .from('trip_info')
             .select('*')
             .single();
@@ -97,7 +103,7 @@ async function loadAllData() {
         DataCache.tripInfo = tripInfo;
         
         // 載入航班資訊
-        const { data: flights, error: flightError } = await supabase
+        const { data: flights, error: flightError } = await supabaseClient
             .from('flights')
             .select('*')
             .eq('trip_id', tripInfo.id)
@@ -108,7 +114,7 @@ async function loadAllData() {
         DataCache.flights.return = flights.filter(f => f.flight_type === 'return');
         
         // 載入每日行程
-        const { data: days, error: daysError } = await supabase
+        const { data: days, error: daysError } = await supabaseClient
             .from('itinerary_days')
             .select('*')
             .eq('trip_id', tripInfo.id)
@@ -118,7 +124,7 @@ async function loadAllData() {
         
         // 載入每日活動
         for (const day of days) {
-            const { data: activities, error: actError } = await supabase
+            const { data: activities, error: actError } = await supabaseClient
                 .from('activities')
                 .select('*')
                 .eq('day_id', day.id)
@@ -147,7 +153,7 @@ async function loadAllData() {
         DataCache.itineraryDays = days;
         
         // 載入景點資訊
-        const { data: attractions, error: attrError } = await supabase
+        const { data: attractions, error: attrError } = await supabaseClient
             .from('attractions')
             .select('*')
             .order('name');
@@ -156,7 +162,7 @@ async function loadAllData() {
         DataCache.attractions = attractions;
         
         // 載入提醒分類
-        const { data: tipCats, error: tipCatError } = await supabase
+        const { data: tipCats, error: tipCatError } = await supabaseClient
             .from('tip_categories')
             .select('*')
             .order('display_order');
@@ -165,7 +171,7 @@ async function loadAllData() {
         
         // 載入提醒項目
         for (const cat of tipCats) {
-            const { data: items, error: itemsError } = await supabase
+            const { data: items, error: itemsError } = await supabaseClient
                 .from('tip_items')
                 .select('*')
                 .eq('category_id', cat.id)
@@ -178,7 +184,7 @@ async function loadAllData() {
         DataCache.tipCategories = tipCats;
         
         // 載入清單分類
-        const { data: checkCats, error: checkCatError } = await supabase
+        const { data: checkCats, error: checkCatError } = await supabaseClient
             .from('checklist_categories')
             .select('*')
             .order('display_order');
@@ -187,7 +193,7 @@ async function loadAllData() {
         
         // 載入清單項目
         for (const cat of checkCats) {
-            const { data: items, error: itemsError } = await supabase
+            const { data: items, error: itemsError } = await supabaseClient
                 .from('checklist_items')
                 .select('*')
                 .eq('category_id', cat.id)
@@ -257,6 +263,9 @@ function loadLocalData() {
         });
     }
     DataCache.checklistCategories = checklistCategories;
+    
+    // 設定快取時間，避免重複載入
+    DataCache.lastFetch = Date.now();
     
     return DataCache;
 }
@@ -329,8 +338,14 @@ async function getAttractionsByCountry(country) {
 async function updateChecklistStatus(itemId, checked) {
     const userId = getUserId();
     
+    // 如果 supabaseClient 未初始化，直接儲存到本地
+    if (!supabaseClient) {
+        saveChecklistToLocal(itemId, checked);
+        return false;
+    }
+    
     try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('user_checklist_status')
             .upsert({
                 user_id: userId,
@@ -355,8 +370,13 @@ async function updateChecklistStatus(itemId, checked) {
 async function getUserChecklistStatus() {
     const userId = getUserId();
     
+    // 如果 supabaseClient 未初始化，直接返回本地資料
+    if (!supabaseClient) {
+        return getChecklistFromLocal();
+    }
+    
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('user_checklist_status')
             .select('item_id, checked')
             .eq('user_id', userId);
@@ -431,12 +451,12 @@ function clearCache() {
  * 檢查 Supabase 連線狀態
  */
 async function checkSupabaseConnection() {
-    if (!supabase) {
+    if (!supabaseClient) {
         return { connected: false, error: 'Supabase not initialized' };
     }
     
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('trip_info')
             .select('id')
             .limit(1);

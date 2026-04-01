@@ -2,256 +2,352 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🇪🇺 歐洲旅行隨身導遊 | Europe Travel Guide</title>
-    <link rel="stylesheet" href="css/style.css">
-    <!-- PWA Support -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2563eb">
-    <!-- Icons -->
-    <link rel="apple-touch-icon" href="images/icon-192x192.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Europe Travel | 奧捷斯匈</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/app.css?v=1">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1>🇪🇺 歐洲旅行隨身導遊</h1>
-                <div class="current-date" id="current-date"></div>
-                <div class="trip-info">
-                    <span id="trip-day-info">計算中...</span>
+    <!-- ==================== APP CONTAINER ==================== -->
+    <div id="app" class="app-container">
+        
+        <!-- ==================== PAGE: HOME ==================== -->
+        <section id="page-home" class="page active">
+            <!-- Header -->
+            <header class="home-header">
+                <div class="location-badge">
+                    <span class="location-icon">📍</span>
+                    <span class="location-text" id="current-city">布達佩斯</span>
+                </div>
+                <div class="day-badge">
+                    <span id="current-day">Day 2</span>
+                </div>
+            </header>
+            
+            <!-- Time Display -->
+            <div class="time-section">
+                <div class="time-card local">
+                    <div class="time-label">當地時間</div>
+                    <div class="time-value" id="local-time">14:32</div>
+                    <div class="time-status">聯繫暢通</div>
+                </div>
+                <div class="time-divider"></div>
+                <div class="time-card taipei">
+                    <div class="time-label">台北時間</div>
+                    <div class="time-value" id="taipei-time">20:32</div>
+                    <div class="time-status">家人已睡</div>
                 </div>
             </div>
-        </header>
-
-        <!-- Flight Info Card -->
-        <div class="flight-info-card" id="flight-info-card">
-            <div class="flight-info-header" onclick="toggleFlightInfo()">
-                <span>✈️ 班機資訊</span>
-                <span class="flight-toggle">▼</span>
+            
+            <!-- AI Guide Card -->
+            <div class="ai-guide-card">
+                <div class="ai-guide-header">
+                    <div class="ai-avatar">🎯</div>
+                    <div class="ai-title">AI 導遊建議</div>
+                </div>
+                <div class="ai-content">
+                    <p class="ai-now">現在：抵達布達佩斯機場，準備入境</p>
+                    <p class="ai-next">下一步：領取行李，前往酒店</p>
+                    <div class="ai-reminder">
+                        <span class="reminder-icon">💡</span>
+                        <span>別忘了在機場換一點福林現金</span>
+                    </div>
+                </div>
             </div>
-            <div class="flight-info-content" id="flight-info-content">
-                <div class="flight-section">
-                    <h4>🛫 去程</h4>
-                    <div id="outbound-flights"></div>
+            
+            <!-- Next Stop Card -->
+            <div class="next-stop-card" onclick="navigateTo('today')">
+                <div class="next-label">下一站</div>
+                <div class="next-content">
+                    <div class="next-time">09:30</div>
+                    <div class="next-title">漁人堡觀景台</div>
+                    <div class="next-desc">俯瞰布達佩斯全景的最佳位置</div>
                 </div>
-                <div class="flight-section">
-                    <h4>🛬 回程</h4>
-                    <div id="return-flights"></div>
+                <div class="next-arrow">→</div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="navigateTo('today')">
+                    <span class="btn-icon">📅</span>
+                    <span class="btn-text">今日行程</span>
+                </button>
+                <button class="quick-btn" onclick="navigateTo('map')">
+                    <span class="btn-icon">🗺️</span>
+                    <span class="btn-text">地圖</span>
+                </button>
+                <button class="quick-btn" onclick="navigateTo('attractions')">
+                    <span class="btn-icon">🏛️</span>
+                    <span class="btn-text">景點</span>
+                </button>
+                <button class="quick-btn" onclick="navigateTo('settings')">
+                    <span class="btn-icon">⚙️</span>
+                    <span class="btn-text">設定</span>
+                </button>
+            </div>
+        </section>
+        
+        <!-- ==================== PAGE: TODAY ==================== -->
+        <section id="page-today" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="navigateTo('home')">←</button>
+                <h1>今日行程</h1>
+                <div class="header-date" id="today-date">4月2日</div>
+            </header>
+            
+            <div class="timeline-container">
+                <!-- Timeline cards will be generated by JS -->
+                <div id="timeline-content">
+                    <!-- Example card structure -->
+                    <div class="timeline-card pending" data-activity-id="1">
+                        <div class="time-badge">08:05</div>
+                        <div class="card-content">
+                            <div class="card-status">即將開始</div>
+                            <h3 class="card-title">抵達布達佩斯</h3>
+                            <p class="card-summary">入境、領行李、與領隊會合</p>
+                            <div class="card-meta">
+                                <span class="duration">⏱ 1小時</span>
+                                <span class="type">交通</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flight-leader">
-                    <strong>領隊：</strong>林孜璟 📞 +886 0913573121
+            </div>
+        </section>
+        
+        <!-- ==================== PAGE: ATTRACTIONS LIST ==================== -->
+        <section id="page-attractions" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="navigateTo('home')">←</button>
+                <h1>景點指南</h1>
+            </header>
+            
+            <div class="attractions-filter">
+                <button class="filter-chip active" data-filter="all">全部</button>
+                <button class="filter-chip" data-filter="hungary">匈牙利</button>
+                <button class="filter-chip" data-filter="austria">奧地利</button>
+                <button class="filter-chip" data-filter="czech">捷克</button>
+            </div>
+            
+            <div class="attractions-list" id="attractions-list">
+                <!-- Attraction cards will be generated by JS -->
+            </div>
+        </section>
+        
+        <!-- ==================== PAGE: ATTRACTION DETAIL ==================== -->
+        <section id="page-attraction-detail" class="page">
+            <header class="page-header transparent">
+                <button class="back-btn" onclick="navigateTo('attractions')">←</button>
+                <button class="share-btn">⋮</button>
+            </header>
+            
+            <div class="attraction-hero">
+                <div class="hero-image" id="attraction-hero-image">
+                    <div class="hero-placeholder">🏛️</div>
+                </div>
+                <div class="hero-overlay"></div>
+            </div>
+            
+            <div class="attraction-content">
+                <div class="content-header">
+                    <span class="country-tag" id="attraction-country">匈牙利</span>
+                    <h1 class="attraction-name" id="attraction-name">匈牙利國會大廈</h1>
+                    <p class="attraction-tagline" id="attraction-tagline">布達佩斯最具代表性的建築，多瑙河畔的璀璨明珠</p>
+                </div>
+                
+                <!-- Highlights -->
+                <div class="content-section">
+                    <h2 class="section-title">必看 3 點</h2>
+                    <ul class="highlight-list" id="attraction-highlights">
+                        <!-- Generated by JS -->
+                    </ul>
+                </div>
+                
+                <!-- Best Experience -->
+                <div class="content-section">
+                    <h2 class="section-title">最值得體驗</h2>
+                    <p class="section-text" id="attraction-experience">
+                        傍晚時分從漁人堡遠眺國會大廈，等待燈光亮起的魔幻時刻。
+                    </p>
+                </div>
+                
+                <!-- Tips -->
+                <div class="content-section">
+                    <h2 class="section-title">注意事項</h2>
+                    <div class="tips-grid" id="attraction-tips">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+                
+                <!-- Photo Guide -->
+                <div class="content-section">
+                    <h2 class="section-title">拍照建議</h2>
+                    <ul class="photo-list" id="attraction-photos">
+                        <!-- Generated by JS -->
+                    </ul>
+                </div>
+                
+                <!-- Duration -->
+                <div class="content-section duration-section">
+                    <div class="duration-badge">
+                        <span class="duration-icon">⏱</span>
+                        <span class="duration-text" id="attraction-duration">建議停留 1-2 小時</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==================== PAGE: MAP (Placeholder) ==================== -->
+        <section id="page-map" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="navigateTo('home')">←</button>
+                <h1>地圖</h1>
+            </header>
+            
+            <div class="map-placeholder">
+                <div class="placeholder-icon">🗺️</div>
+                <h2>地圖功能開發中</h2>
+                <p>第二階段將加入離線地圖與 GPS 定位</p>
+                <div class="placeholder-note">
+                    <span>💡</span>
+                    <span>預留設計：Leaflet.js + OpenStreetMap + 離線快取</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==================== PAGE: FAVORITES (Placeholder) ==================== -->
+        <section id="page-favorites" class="page">
+            <header class="page-header">
+                <h1>收藏</h1>
+            </header>
+            
+            <div class="favorites-empty">
+                <div class="empty-icon">⭐</div>
+                <h2>還沒有收藏</h2>
+                <p>在景點頁面點擊愛心圖示即可收藏</p>
+            </div>
+        </section>
+        
+        <!-- ==================== PAGE: SETTINGS ==================== -->
+        <section id="page-settings" class="page">
+            <header class="page-header">
+                <h1>設定</h1>
+            </header>
+            
+            <div class="settings-list">
+                <div class="settings-section">
+                    <h3 class="section-label">行程資訊</h3>
+                    <div class="setting-item">
+                        <span class="setting-name">團號</span>
+                        <span class="setting-value">奧捷斯匈 10日</span>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-name">領隊</span>
+                        <span class="setting-value">林孜璟</span>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-name">緊急聯絡</span>
+                        <span class="setting-value">+886 913573121</span>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="section-label">關於</h3>
+                    <div class="setting-item">
+                        <span class="setting-name">版本</span>
+                        <span class="setting-value">v2.0 重構版</span>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-name">資料來源</span>
+                        <span class="setting-value">本地 JSON</span>
+                    </div>
+                </div>
+                
+                <div class="settings-note">
+                    <p>💡 第二階段預計加入：</p>
+                    <ul>
+                        <li>Supabase 雲端同步</li>
+                        <li>離線地圖下載</li>
+                        <li>GPS 定位導航</li>
+                        <li>推播提醒</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==================== FLOATING AI GUIDE ==================== -->
+        <div class="ai-fab" id="ai-fab" onclick="toggleAiCard()">
+            <span class="ai-fab-icon">🎯</span>
+            <span class="ai-fab-text">AI導遊</span>
+        </div>
+        
+        <!-- AI Card Popup -->
+        <div class="ai-card-popup" id="ai-card-popup">
+            <div class="ai-card-header">
+                <span class="ai-card-icon">🎯</span>
+                <span class="ai-card-title">AI 導遊</span>
+                <button class="ai-card-close" onclick="toggleAiCard()">×</button>
+            </div>
+            <div class="ai-card-content">
+                <div class="ai-suggestion">
+                    <div class="suggestion-label">現在建議</div>
+                    <p>抵達布達佩斯機場，準備入境手續</p>
+                </div>
+                <div class="ai-suggestion">
+                    <div class="suggestion-label">下一步</div>
+                    <p>領取行李後，在出口與領隊會合</p>
+                </div>
+                <div class="ai-suggestion reminder">
+                    <div class="suggestion-label">提醒</div>
+                    <p>別忘了在機場換一點福林現金備用</p>
                 </div>
             </div>
         </div>
-
-        <!-- Navigation Tabs -->
-        <nav class="nav-tabs">
-            <button class="nav-tab active" data-view="today">
-                📅 今日行程
+        
+        <!-- ==================== BOTTOM NAVIGATION ==================== -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-page="home" onclick="navigateTo('home')">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">首頁</span>
             </button>
-            <button class="nav-tab" data-view="full">
-                🗺️ 全部行程
+            <button class="nav-item" data-page="today" onclick="navigateTo('today')">
+                <span class="nav-icon">📅</span>
+                <span class="nav-label">今日</span>
             </button>
-            <button class="nav-tab" data-view="spots">
-                🏛️ 景點詳情
+            <button class="nav-item" data-page="map" onclick="navigateTo('map')">
+                <span class="nav-icon">🗺️</span>
+                <span class="nav-label">地圖</span>
             </button>
-            <button class="nav-tab" data-view="tips">
-                💡 實用提醒
+            <button class="nav-item" data-page="favorites" onclick="navigateTo('favorites')">
+                <span class="nav-icon">⭐</span>
+                <span class="nav-label">收藏</span>
             </button>
-            <button class="nav-tab" data-view="checklist">
-                ✅ 行前清單
+            <button class="nav-item" data-page="settings" onclick="navigateTo('settings')">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">設定</span>
             </button>
         </nav>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- View: Today (Default) -->
-            <section id="view-today" class="view active">
-                <div class="section-header">
-                    <h2>📅 今日行程</h2>
-                    <div class="date-display" id="today-date-display"></div>
-                </div>
-                <div id="today-content" class="content-area">
-                    <div class="loading">載入中...</div>
-                </div>
-            </section>
-
-            <!-- View: Full Itinerary -->
-            <section id="view-full" class="view">
-                <div class="section-header">
-                    <h2>🗺️ 完整行程規劃</h2>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="all">全部</button>
-                        <button class="filter-btn" data-filter="austria">🇦🇹 奧地利</button>
-                        <button class="filter-btn" data-filter="slovakia">🇸🇰 斯洛伐克</button>
-                        <button class="filter-btn" data-filter="czech">🇨🇿 捷克</button>
-                        <button class="filter-btn" data-filter="germany">🇩🇪 德國</button>
-                    </div>
-                </div>
-                <div id="full-itinerary" class="content-area">
-                    <div class="loading">載入中...</div>
-                </div>
-            </section>
-
-            <!-- View: Attractions -->
-            <section id="view-spots" class="view">
-                <div class="section-header">
-                    <h2>🏛️ 景點詳細介紹</h2>
-                    <input type="text" id="spot-search" placeholder="🔍 搜尋景點..." class="search-input">
-                </div>
-                <div id="spots-content" class="content-area">
-                    <div class="loading">載入中...</div>
-                </div>
-            </section>
-
-            <!-- View: Tips -->
-            <section id="view-tips" class="view">
-                <div class="section-header">
-                    <h2>💡 實用提醒</h2>
-                </div>
-                <div id="tips-content" class="content-area">
-                    <div class="tips-grid">
-                        <div class="tip-card" data-tip="luggage">
-                            <div class="tip-icon">🎒</div>
-                            <h3>行李準備</h3>
-                            <div class="tip-content" id="tip-luggage"></div>
-                        </div>
-                        <div class="tip-card" data-tip="food">
-                            <div class="tip-icon">🍽️</div>
-                            <h3>飲食建議</h3>
-                            <div class="tip-content" id="tip-food"></div>
-                        </div>
-                        <div class="tip-card" data-tip="money">
-                            <div class="tip-icon">💰</div>
-                            <h3>金錢與支付</h3>
-                            <div class="tip-content" id="tip-money"></div>
-                        </div>
-                        <div class="tip-card" data-tip="health">
-                            <div class="tip-icon">🏥</div>
-                            <h3>健康與安全</h3>
-                            <div class="tip-content" id="tip-health"></div>
-                        </div>
-                        <div class="tip-card" data-tip="photo">
-                            <div class="tip-icon">📸</div>
-                            <h3>拍照技巧</h3>
-                            <div class="tip-content" id="tip-photo"></div>
-                        </div>
-                        <div class="tip-card" data-tip="culture">
-                            <div class="tip-icon">🙏</div>
-                            <h3>文化禮儀</h3>
-                            <div class="tip-content" id="tip-culture"></div>
-                        </div>
-                        <div class="tip-card" data-tip="transport">
-                            <div class="tip-icon">🚇</div>
-                            <h3>交通與移動</h3>
-                            <div class="tip-content" id="tip-transport"></div>
-                        </div>
-                        <div class="tip-card" data-tip="special">
-                            <div class="tip-icon">⚠️</div>
-                            <h3>特殊提醒</h3>
-                            <div class="tip-content" id="tip-special"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- View: Checklist -->
-            <section id="view-checklist" class="view">
-                <div class="section-header">
-                    <h2>✅ 行前準備清單</h2>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="checklist-progress"></div>
-                        <span class="progress-text" id="checklist-progress-text">0%</span>
-                    </div>
-                </div>
-                <div id="checklist-content" class="content-area">
-                    <div class="checklist-section" id="checklist-documents">
-                        <h3>📄 證件與文件</h3>
-                        <div class="checklist-items" id="documents-items"></div>
-                    </div>
-                    <div class="checklist-section" id="checklist-luggage">
-                        <h3>🎒 行李物品</h3>
-                        <div class="checklist-items" id="luggage-items"></div>
-                    </div>
-                    <div class="checklist-section" id="checklist-electronics">
-                        <h3>🔌 電子用品</h3>
-                        <div class="checklist-items" id="electronics-items"></div>
-                    </div>
-                    <div class="checklist-section" id="checklist-health">
-                        <h3>💊 健康藥品</h3>
-                        <div class="checklist-items" id="health-items"></div>
-                    </div>
-                    <div class="checklist-section" id="checklist-money">
-                        <h3>💳 財務準備</h3>
-                        <div class="checklist-items" id="money-items"></div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Quick Actions FAB -->
-        <div class="fab-container">
-            <button class="fab-main" id="fab-menu">☰</button>
-            <div class="fab-actions" id="fab-actions">
-                <button class="fab-action" onclick="scrollToTop()">⬆️ 回到頂部</button>
-                <button class="fab-action" onclick="showEmergencyInfo()">🆘 緊急資訊</button>
-                <button class="fab-action" onclick="toggleOfflineMode()">📴 離線模式</button>
-            </div>
-        </div>
-
-        <!-- Modal for details -->
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <span class="modal-close">&times;</span>
-                <div id="modal-body"></div>
-            </div>
-        </div>
+        
+        <!-- Safe Area for iPhone -->
+        <div class="safe-area-bottom"></div>
+        
     </div>
-
-    <!-- Scripts -->
-    <!-- Supabase Client Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     
-    <!-- Local Data (Fallback if Supabase fails) -->
+    <!-- ==================== DATA SCRIPTS ==================== -->
+    <script src="data/trip-info.js"></script>
     <script src="data/itinerary.js"></script>
     <script src="data/attractions.js"></script>
-    <script src="data/tips.js"></script>
-    <script src="data/checklist.js"></script>
     
-    <!-- Database Module -->
-    <script src="js/db.js"></script>
-    
-    <!-- Main App -->
+    <!-- ==================== APP SCRIPT ==================== -->
     <script src="js/app.js"></script>
-    
-    <script>
-        // Register Service Worker for PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker registered'))
-                .catch(err => console.log('Service Worker registration failed'));
-        }
-        
-        // Initialize Supabase when page loads
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Wait a moment for Supabase library to load
-            setTimeout(async () => {
-                if (window.SupabaseDB) {
-                    const initialized = window.SupabaseDB.init();
-                    console.log('Supabase initialization:', initialized ? 'Success' : 'Failed');
-                    
-                    if (initialized) {
-                        // Test connection
-                        const connection = await window.SupabaseDB.checkConnection();
-                        console.log('Supabase connection:', connection.connected ? 'Connected' : 'Failed');
-                        
-                        // Preload data
-                        await window.SupabaseDB.loadAllData();
-                    }
-                }
-            }, 500);
-        });
-    </script>
 </body>
 </html>

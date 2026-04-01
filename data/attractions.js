@@ -1,21 +1,25 @@
 /**
- * 奧捷斯匈景點詳細介紹
+ * 奧捷斯匈景點詳細介紹 - 旅遊秘密客深度版
+ * 針對手機導覽優化，以專業旅行者角度撰寫
+ * 包含：避坑指南、私房玩法、省錢技巧、拍照攻略
  */
 
 const ATTRACTIONS_DATA = [
     // ===== 匈牙利 - 布達佩斯 =====
     {
         id: "budapest-parliament",
-        name: "匈牙利國會大廈 (Hungarian Parliament)",
+        name: "匈牙利國會大廈",
         city: "布達佩斯",
         country: "hungary",
         icon: "🏛️",
-        description: "布達佩斯最具代表性的建築，歐洲最大的國會建築之一。新哥德式與新文藝復興風格的完美融合，坐落於多瑙河畔，與漁人堡遙遙相望。",
+        lat: 47.5079,
+        lng: 19.0455,
+        description: "布達佩斯最具代表性的建築，歐洲最大的國會建築之一。新哥德式與新文藝復興風格的完美融合。",
         highlights: [
             "黃金圓頂 - 重達4公斤的皇冠",
             "圓頂大廳 - 96公尺高，象徵896年建國",
             "階梯大廳 - 紅毯與大理石柱",
-            "多瑙河畔夜景 - 晚上燈光璀璨"
+            "多瑙河畔夜景"
         ],
         tips: {
             bestTime: "早上9點開門即入場，或傍晚拍夜景",
@@ -24,22 +28,52 @@ const ATTRACTIONS_DATA = [
             booking: "領隊已安排團體導覽",
             photo: "對岸漁人堡是最佳拍攝點"
         },
-        openingHours: "08:00-18:00（夏季延長）",
-        location: "Kossuth Lajos tér 1-3, Budapest",
-        howToGet: "地鐵M2線 Kossuth Lajos tér 站"
+        openingHours: "08:00-18:00",
+        location: "Kossuth Lajos tér 1-3",
+        howToGet: "地鐵M2線 Kossuth Lajos tér 站",
+        // 旅遊秘密客獨家內容
+        secrets: {
+            bestSpots: [
+                "📸 對岸漁人堡是拍攝國會大廈全景的最佳位置，傍晚藍調時刻最美",
+                "🌅 日落後30分鐘的藍色時刻，大廈燈光亮起時最夢幻",
+                "⛵ 多瑙河遊船第二層船頭，可以拍到無遮蔽的大廈正面"
+            ],
+            avoid: [
+                "❌ 白天11:00-14:00觀光客最多，建議避開",
+                "❌ 不要在國會大廈正門前停留太久，警衛會驅趕",
+                "❌ 內部導覽禁止拍照，手機請收起"
+            ],
+            localTips: [
+                "💡 免費進入大廳的秘訣：說要進去紀念品店，可以拍到階梯大廳",
+                "💡 國會大廈對面的公園長椅，是當地人喜歡的野餐看河景地點",
+                "💡 每週六中午12點有衛兵交接儀式，值得一看"
+            ],
+            photoGuide: [
+                "📷 漁人堡上層觀景台，長焦鏡頭壓縮感",
+                "📷 多瑙河遊船上廣角拍攝",
+                "📷 國會大廈對岸的Shoes on the Danube紀念碑旁"
+            ],
+            moneySaving: [
+                "💰 外部拍照完全免費，不用付錢入內也能欣賞",
+                "💰 夜景比日景更值得看，省門票錢",
+                "💰 團體導覽比個人預約便宜約30%"
+            ]
+        }
     },
     {
         id: "fishermans-bastion",
-        name: "漁人堡 (Fisherman's Bastion)",
+        name: "漁人堡",
         city: "布達佩斯",
         country: "hungary",
         icon: "🏰",
-        description: "位於布達城堡山，新羅馬式風格的觀景台。七座尖塔象徵七個馬札爾部落，是欣賞多瑙河與國會大廈的最佳地點。",
+        lat: 47.5024,
+        lng: 19.0345,
+        description: "位於布達城堡山，新羅馬式風格的觀景台。七座尖塔象徵七個馬札爾部落。",
         highlights: [
             "觀景台 - 270度俯瞰布達佩斯",
             "馬提亞教堂 - 彩色馬賽克屋頂",
-            "拱廊與尖塔 - 童話般的建築",
-            "日出日落 - 金色時刻最美"
+            "拱廊與尖塔",
+            "日出日落"
         ],
         tips: {
             bestTime: "日出或日落時分",
@@ -48,22 +82,51 @@ const ATTRACTIONS_DATA = [
             booking: "現場購票",
             photo: "從上層觀景台拍國會大廈"
         },
-        openingHours: "24小時（觀景台09:00-21:00）",
-        location: "Szentháromság tér, Budapest",
-        howToGet: "布達城堡山纜車或步行"
+        openingHours: "24小時",
+        location: "Szentháromság tér",
+        howToGet: "布達城堡山纜車或步行",
+        secrets: {
+            bestSpots: [
+                "📸 上層觀景台最左側角落，可以拍到國會大廈+多瑙河的經典構圖",
+                "🌅 日出時幾乎沒人，可以獨佔整個觀景台",
+                "☕ 漁人堡下方的咖啡廳，窗邊座位有絕佳視野"
+            ],
+            avoid: [
+                "❌ 10:00-16:00是觀光客高峰期，人擠人",
+                "❌ 上層觀景台如果排隊超過20人，可以考慮只逛免費區域",
+                "❌ 馬提亞教堂內部需要額外付費，CP值不高"
+            ],
+            localTips: [
+                "💡 免費區域的拱廊拍照就夠美了，不一定要付錢上觀景台",
+                "💡 傍晚時分來，可以一次看到日景和夜景",
+                "💡 漁人堡旁邊的馬提亞教堂外牆比內部更值得拍"
+            ],
+            photoGuide: [
+                "📷 上層觀景台角落，國會大廈在左側",
+                "📷 拱廊框架構圖，將國會大廈框在中間",
+                "📷 晚上長曝光拍車軌+大廈倒影"
+            ],
+            moneySaving: [
+                "💰 下層拱廊完全免費，景色已經很美",
+                "💰 €3觀景台門票其實很便宜，值得付",
+                "💰 不要買紀念品店的东西，貴且品質一般"
+            ]
+        }
     },
     {
         id: "szechenyi-bath",
-        name: "塞切尼溫泉 (Széchenyi Thermal Bath)",
+        name: "塞切尼溫泉",
         city: "布達佩斯",
         country: "hungary",
         icon: "♨️",
-        description: "歐洲最大的溫泉浴場，新巴洛克風格建築。布達佩斯被稱為「溫泉之都」，這裡有15個室內池和3個室外池。",
+        lat: 47.5188,
+        lng: 19.0811,
+        description: "歐洲最大的溫泉浴場，新巴洛克風格建築。布達佩斯被稱為「溫泉之都」。",
         highlights: [
-            "黃色宮殿建築 - 絕美拍照背景",
-            "室外溫泉池 - 冬天泡溫泉最舒服",
-            "溫泉水療 - 富含礦物質",
-            "棋盤遊戲 - 當地人在水中下棋"
+            "黃色宮殿建築",
+            "室外溫泉池",
+            "溫泉水療",
+            "棋盤遊戲"
         ],
         tips: {
             bestTime: "早上較少人，下午最熱鬧",
@@ -73,23 +136,53 @@ const ATTRACTIONS_DATA = [
             photo: "黃色建築前或室內泳池"
         },
         openingHours: "07:00-20:00",
-        location: "Állatkerti krt. 9-11, Budapest",
-        howToGet: "地鐵M1線 Széchenyi fürdő 站"
+        location: "Állatkerti krt. 9-11",
+        howToGet: "地鐵M1線 Széchenyi fürdő 站",
+        secrets: {
+            bestSpots: [
+                "📸 室外池子旁邊的黃色柱廊，是Instagram打卡聖地",
+                "♟️ 和當地阿伯在水裡下棋，超級道地體驗",
+                "🌡️ 最裡面的高溫池（38-40度）人最少"
+            ],
+            avoid: [
+                "❌ 週末下午人擠得像下餃子",
+                "❌ 不要帶貴重物品，置物櫃不太安全",
+                "❌ 室內池水溫較低，泡久了會冷"
+            ],
+            localTips: [
+                "💡 一定要帶自己的拖鞋和毛巾，現場租很貴",
+                "💡 防水手機袋必備，但不要邊泡邊滑手機",
+                "💡 買日票可以進出多次，中午出去吃飯再回來",
+                "💡 當地人都早上7-9點來，人少水乾淨"
+            ],
+            photoGuide: [
+                "📷 黃色柱廊前，人物放在畫面下方1/3",
+                "📷 泳池中拍建築倒影",
+                "📷 棋盤區域捕捉當地生活感"
+            ],
+            moneySaving: [
+                "💰 帶自己的毛巾省 €5租借費",
+                "💰 自己帶瓶裝水，裡面賣很貴",
+                "💰 如果在布達佩斯待多天，買10次券更划算"
+            ]
+        }
     },
     
     // ===== 斯洛伐克 - 布拉提斯拉瓦 =====
     {
         id: "bratislava-castle",
-        name: "布拉提斯拉瓦城堡 (Bratislava Castle)",
+        name: "布拉提斯拉瓦城堡",
         city: "布拉提斯拉瓦",
         country: "slovakia",
         icon: "🏰",
-        description: "坐落於多瑙河畔的小山上，城堡四角各有一座塔樓，外觀像倒置的桌子。可俯瞰多瑙河與奧地利邊境。",
+        lat: 48.1421,
+        lng: 17.0999,
+        description: "坐落於多瑙河畔的小山上，外觀像倒置的桌子。可俯瞰多瑙河與奧地利邊境。",
         highlights: [
-            "城堡博物館 - 斯洛伐克歷史文物",
-            "頂樓觀景台 - 360度全景",
-            "皇冠廳 - 復刻匈牙利國王加冕場景",
-            "四大塔樓 - 獨特建築外觀"
+            "城堡博物館",
+            "頂樓觀景台",
+            "皇冠廳",
+            "四大塔樓"
         ],
         tips: {
             bestTime: "傍晚時分看夕陽",
@@ -100,165 +193,255 @@ const ATTRACTIONS_DATA = [
         },
         openingHours: "09:00-17:00",
         location: "Hrad, 811 06 Bratislava",
-        howToGet: "從老城步行15分鐘上坡"
+        howToGet: "從老城步行15分鐘上坡",
+        secrets: {
+            bestSpots: [
+                "📸 城堡庭院的白色噴泉前，可以拍到城堡全景",
+                "🌉 多瑙河上的舊橋（Old Bridge）是拍城堡倒影的好地方",
+                "☕ 城堡內的咖啡廳價格合理，view很棒"
+            ],
+            avoid: [
+                "❌ 博物館內容偏歷史，如果沒興趣可以省錢不進去",
+                "❌ 上坡路很累，建議搭公車或計程車",
+                "❌ 城堡內餐廳貴又普通，回老城吃更好"
+            ],
+            localTips: [
+                "💡 城堡免費區域就夠逛了，不用付錢進博物館",
+                "💡 傍晚來可以看夕陽，同時看到白天和夜景",
+                "💡 城堡下方有免費的觀景平台，不進城堡也能看風景"
+            ],
+            photoGuide: [
+                "📷 舊橋上拍城堡+多瑙河",
+                "📷 城堡庭院白色噴泉",
+                "📷 頂樓觀景台拍城市全景"
+            ],
+            moneySaving: [
+                "💰 城堡免費參觀，只在外面拍照就夠美",
+                "💰 從老城走路上坡免費，只是累一點",
+                "💰 博物館門票偏貴，內容普通"
+            ]
+        }
+    },
+    {
+        id: "old-town-bratislava",
+        name: "布拉提斯拉瓦老城",
+        city: "布拉提斯拉瓦",
+        country: "slovakia",
+        icon: "🏘️",
+        lat: 48.1435,
+        lng: 17.1090,
+        description: "中世紀風格的歷史城區，石板路與彩色建築。",
+        highlights: ["主廣場", "老市政廳", "聖馬丁大教堂", "街頭雕塑"],
+        tips: { bestTime: "下午", duration: "2-3小時", tickets: "免費" },
+        secrets: {
+            bestSpots: [
+                "📸 主廣場的拿破崙士兵雕像，可以坐在旁邊合照",
+                "🎭 街頭藝人表演的角落，很有歐洲氛圍",
+                "☕ 隱藏在巷子裡的咖啡廳，比主街便宜一半"
+            ],
+            avoid: [
+                "❌ 主廣場周邊的餐廳都是觀光客價",
+                "❌ 不要在街邊買紀念品，貴又劣質"
+            ],
+            localTips: [
+                "💡 走進小巷子裡，會發現更便宜的餐廳",
+                "💡 老市政廳塔樓可以免費上去看風景",
+                "💡 下午4點後光線最美，適合拍照"
+            ],
+            moneySaving: [
+                "💰 完全免費逛",
+                "💰 巷子裡的餐廳比主街便宜30-50%"
+            ]
+        }
     },
     
     // ===== 奧地利 - 維也納 =====
     {
-        id: "schoenbrunn",
-        name: "美泉宮 (Schönbrunn Palace)",
+        id: "schonbrunn-palace",
+        name: "美泉宮",
         city: "維也納",
         country: "austria",
-        icon: "🏛️",
-        description: "美泉宮是哈布斯堡王朝的夏宮，建於18世紀，擁有1441間房間。宮殿結合了巴洛克藝術與皇家氣派，是奧地利最重要的文化遺產之一。",
+        icon: "👑",
+        lat: 48.1845,
+        lng: 16.3122,
+        description: "哈布斯堡王朝的夏宮，擁有1441間房間，巴洛克藝術與皇家氣派的完美結合。",
         highlights: [
-            "鏡廳 (Hall of Mirrors) - 莫扎特6歲時在此演奏",
-            "皇家花園 - 法式庭園設計，有海王星噴泉",
-            "凱旋門觀景台 - 可俯瞰宮殿與維也納市景",
-            "動物園 - 世界最古老的動物園之一"
+            "鏡廳 - 莫扎特6歲時在此演奏",
+            "皇家花園 - 法式庭園設計",
+            "凱旋門觀景台",
+            "動物園 - 世界最古老的動物園"
         ],
         tips: {
             bestTime: "早上9點開門即入場，避開人潮",
-            duration: "建議停留3-4小時",
-            tickets: "Imperial Tour €22 (22間房) 或 Grand Tour €29 (40間房)",
+            duration: "3-4小時",
+            tickets: "Imperial Tour €22 或 Grand Tour €29",
             booking: "領隊已安排團體導覽",
             photo: "花園內的凱旋門是最佳拍照點"
         },
-        openingHours: "08:30 - 17:00 (夏季延長至18:00)",
-        location: "Schönbrunner Schloßstraße 47, 1130 Wien",
-        howToGet: "地鐵U4線 Schönbrunn 站"
+        openingHours: "08:30-17:00",
+        location: "Schönbrunner Schloßstraße 47",
+        howToGet: "地鐵U4線 Schönbrunn 站",
+        secrets: {
+            bestSpots: [
+                "📸 凱旋門觀景台可以俯瞰整個宮殿和維也納，必去！",
+                "🌹 玫瑰花園在5-6月最美，人又少",
+                "🦚 宮殿後面的噴泉池有孔雀，超級美",
+                "🎵 宮殿內的音樂會晚上舉行，氣氛絕佳"
+            ],
+            avoid: [
+                "❌ 11:00-15:00是最高峰，排隊入場可能等1小時",
+                "❌ 宮殿內禁止拍照，不要偷偷拍",
+                "❌ 花園盡頭的動物園需要額外門票",
+                "❌ 不要在宮殿餐廳吃飯，貴又普通"
+            ],
+            localTips: [
+                "💡 Imperial Tour (22間房) 就夠了，Grand Tour房間太多會膩",
+                "💡 語音導覽含在門票內，記得拿",
+                "💡 花園免費且超美，不進宮殿也可以逛花園",
+                "💡 每年5-9月有露天音樂會，可以查查看",
+                "💡 早鳥票（8:30入場）比較便宜"
+            ],
+            photoGuide: [
+                "📷 凱旋門觀景台，宮殿在花園盡頭的構圖",
+                "📷 宮殿正面廣場對稱構圖",
+                "📷 花園兩側樹林形成的綠色隧道",
+                "📷 噴泉池邊的孔雀"
+            ],
+            moneySaving: [
+                "💰 只逛花園完全免費，景色最美",
+                "💰 維也納卡（Vienna Card）可以打折",
+                "💰 下午4點後入場票價較便宜",
+                "💰 帶便當在長椅上吃，省餐費"
+            ]
+        }
     },
     {
-        id: "st-stephen",
-        name: "聖史蒂芬大教堂 (St. Stephen's Cathedral)",
+        id: "st-stephens-cathedral",
+        name: "聖史蒂芬大教堂",
         city: "維也納",
         country: "austria",
         icon: "⛪",
-        description: "維也納的地標與精神象徵，建於12世紀，混合了羅馬式與哥德式建築風格。彩色瓦片屋頂是維也納天際線的標誌。",
+        lat: 48.2085,
+        lng: 16.3732,
+        description: "維也納的地標與精神象徵，混合了羅馬式與哥德式建築風格。彩色瓦片屋頂是維也納天際線的標誌。",
         highlights: [
-            "南塔 (South Tower) - 登塔俯瞰維也納",
-            "北塔觀景台 - 電梯直達，適合不想爬樓梯的人",
-            "地下墓穴 - 哈布斯堡家族成員長眠之地",
-            "彩色屋頂 - 雙頭鷹圖案，象徵哈布斯堡王朝"
+            "南塔 - 登塔俯瞰維也納",
+            "北塔觀景台 - 電梯直達",
+            "地下墓穴",
+            "彩色屋頂"
         ],
         tips: {
             bestTime: "傍晚時分光線最美",
             duration: "教堂參觀1小時，登塔額外1小時",
             tickets: "教堂免費，北塔電梯 €6，南塔爬樓梯 €5",
-            booking: "現場購票即可",
-            photo: "從格拉本大街拍攝教堂正面最壯觀"
-        },
-        openingHours: "06:00 - 22:00 (週日禮拜時間不同)",
-        location: "Stephansplatz 3, 1010 Wien",
-        howToGet: "地鐵U1/U3線 Stephansplatz 站"
-    },
-    {
-        id: "hofburg",
-        name: "霍夫堡宮 (Hofburg Palace)",
-        city: "維也納",
-        country: "austria",
-        icon: "👑",
-        description: "哈布斯堡王朝的冬宮，現在是奧地利總統官邸。茜茜公主博物館展示了這位傳奇皇后的生活。",
-        highlights: [
-            "茜茜公主博物館 - 了解伊莉莎白皇后的一生",
-            "皇家銀器館 - 超過7,000件皇家餐具",
-            "西班牙騎術學校 - 利比扎馬表演",
-            "英雄廣場 - 兩位歐根親王雕像"
-        ],
-        tips: {
-            bestTime: "上午參觀",
-            duration: "2-3小時",
-            tickets: "茜茜博物館 €16，組合票 €30",
-            booking: "領隊已安排",
-            photo: "英雄廣場與宮殿外觀"
-        },
-        openingHours: "09:00-17:00",
-        location: "Michaelerkuppel, 1010 Wien",
-        howToGet: "地鐵U3線 Herrengasse 站"
-    },
-    {
-        id: "belvedere",
-        name: "熊布朗宮/美景宮 (Belvedere)",
-        city: "維也納",
-        country: "austria",
-        icon: "🎨",
-        description: "巴洛克風格的宮殿，分為上美景宮和下美景宮。上美景宮收藏了大量19世紀奧地利藝術品，包括克林姆的《吻》。",
-        highlights: [
-            "克林姆《吻》 - 分離派代表作",
-            "花園噴泉 - 巴洛克對稱美學",
-            "宮殿倒影池 - 絕美拍照點",
-            "埃貢·席勒作品 - 表現主義大師"
-        ],
-        tips: {
-            bestTime: "上午人少",
-            duration: "2-3小時",
-            tickets: "上美景宮 €16",
             booking: "現場購票",
-            photo: "花園水池倒映宮殿"
+            photo: "從格拉本大街拍攝教堂正面"
         },
-        openingHours: "09:00-18:00",
-        location: "Prinz Eugen-Straße 27, 1030 Wien",
-        howToGet: "電車D線 Schloss Belvedere 站"
+        openingHours: "06:00-22:00",
+        location: "Stephansplatz 3",
+        howToGet: "地鐵U1/U3線 Stephansplatz 站",
+        secrets: {
+            bestSpots: [
+                "📸 格拉本大街（Graben）盡頭拍教堂正面，經典明信片角度",
+                "🌇 北塔傍晚的夕陽光灑在屋頂上，雙頭鷹圖案會發光",
+                "🦇 地下墓穴有哈布斯堡家族成員的棺木，氣氛詭異但有趣",
+                "☕ 教堂對面的咖啡廳二樓，邊喝咖啡邊看教堂"
+            ],
+            avoid: [
+                "❌ 週日禮拜時間（早上）不開放觀光",
+                "❌ 南塔343階樓梯，膝蓋不好不要爬",
+                "❌ 教堂內部推銷蠟燭和祈福的，會一直煩你",
+                "❌ 廣場上的街頭藝人會主動搭訕要錢"
+            ],
+            localTips: [
+                "💡 教堂免費進入，只有登塔要錢",
+                "💡 北塔有電梯，南塔要爬樓梯，選北塔比較輕鬆",
+                "💡 整點時鐘樓會敲鐘，在廣場聽很有氛圍",
+                "💡 教堂後面的巷子有很多便宜的紀念品店",
+                "💡 晚上點燈後的教堂也很美，可以拍夜景"
+            ],
+            photoGuide: [
+                "📷 格拉本大街盡頭，用長焦壓縮街道和教堂",
+                "📷 北塔觀景台360度拍維也納市景",
+                "📷 夜晚教堂點燈後，低角度拍攝",
+                "📷 彩色屋頂細節，用望遠鏡頭拍雙頭鷹"
+            ],
+            moneySaving: [
+                "💰 進教堂免費，只在外面拍照也超美",
+                "💰 兩個塔選一個登就好，北塔有電梯比較值",
+                "💰 地下墓穴導覽 €6，算便宜值得去"
+            ]
+        }
     },
     {
-        id: "hundertwasser",
-        name: "百水公寓 (Hundertwasserhaus)",
+        id: "vienna-opera",
+        name: "維也納國家歌劇院",
         city: "維也納",
         country: "austria",
-        icon: "🎨",
-        description: "奧地利藝術家百水先生設計的公寓，色彩繽紛、線條不規則，挑戰傳統建築美學。屋頂種滿了樹木，被稱為「垂直森林」。",
-        highlights: [
-            "彩色外牆 - 沒有直線的建築",
-            "屋頂花園 - 與自然共生",
-            "百水藝術村 - 對面可參觀",
-            "紀念品店 - 百水風格商品"
-        ],
-        tips: {
-            bestTime: "白天光線好",
-            duration: "30分鐘外觀拍照",
-            tickets: "外觀免費",
-            booking: "無需預約",
-            photo: "街對面可拍到全景"
-        },
-        openingHours: "外觀24小時",
-        location: "Kegelgasse 36-38, 1030 Wien",
-        howToGet: "地鐵U3/U4線 Landstraße 站"
+        icon: "🎭",
+        lat: 48.2033,
+        lng: 16.3691,
+        description: "世界頂級歌劇院之一，文藝復興風格建築。",
+        highlights: ["大廳水晶吊燈", "皇家包廂", "舞台參觀", "歌劇演出"],
+        tips: { bestTime: "導覽團時間", duration: "1小時", tickets: "€10" },
+        secrets: {
+            bestSpots: [
+                "📸 歌劇院正門的台階，電影感滿滿",
+                "🎭 站票（Stehplatz）只要 €3-4，可以體驗歌劇氛圍"
+            ],
+            avoid: [
+                "❌ 正式歌劇票很貴，除非真的很愛否則不必買"
+            ],
+            localTips: [
+                "💡 有英文導覽團，可以進入後台和包廂",
+                "💡 站票雖然要站，但音響效果一樣好",
+                "💡 歌劇院建築外面比裡面更值得拍"
+            ],
+            moneySaving: [
+                "💰 站票超便宜，體驗歌劇最划算的方式",
+                "💰 導覽團 €10 可以進去參觀，比看歌劇便宜"
+            ]
+        }
     },
-    
-    // ===== 捷克 - 布爾諾 =====
     {
-        id: "spilberk",
-        name: "史畢利伯城堡 (Špilberk Castle)",
-        city: "布爾諾",
-        country: "czech",
-        icon: "🏰",
-        description: "布爾諾的地標，原為中世紀城堡，後改為監獄。現在是博物館，可俯瞰整個城市。",
-        highlights: [
-            "城堡塔樓 - 360度俯瞰布爾諾",
-            "監獄博物館 - 了解歷史",
-            "城堡花園 - 散步休憩",
-            "夜景 - 城市燈火"
-        ],
-        tips: {
-            bestTime: "下午或傍晚",
-            duration: "1.5-2小時",
-            tickets: "約 €6",
-            booking: "現場購票",
-            photo: "塔樓俯瞰城市"
-        },
-        openingHours: "09:00-17:00",
-        location: "Špilberk 210/1, Brno",
-        howToGet: "步行上坡約15分鐘"
+        id: "melk-abbey",
+        name: "梅爾克修道院",
+        city: "梅爾克",
+        country: "austria",
+        icon: "🏛️",
+        lat: 48.2282,
+        lng: 15.3305,
+        description: "瓦豪河谷的巴洛克式修道院，黃色外觀。",
+        highlights: ["圖書館", "大理石廳", "修道院教堂", "觀景台"],
+        tips: { bestTime: "早上", duration: "2小時", tickets: "€13" },
+        secrets: {
+            bestSpots: [
+                "📸 修道院後方的觀景台，俯瞰多瑙河彎道",
+                "📚 圖書館的壁畫和古籍超震撼"
+            ],
+            avoid: [
+                "❌ 團體導覽時間固定，不自由"
+            ],
+            localTips: [
+                "💡 修道院有免費的觀景台，不用付錢也能看風景",
+                "💡 瓦豪河谷沿途風景很美，不要睡著"
+            ],
+            moneySaving: [
+                "💰 如果只看外觀和觀景台，不用買票進去"
+            ]
+        }
     },
     
     // ===== 捷克 - 布拉格 =====
     {
         id: "prague-castle",
-        name: "布拉格城堡 (Prague Castle)",
+        name: "布拉格城堡",
         city: "布拉格",
         country: "czech",
         icon: "🏰",
-        description: "全球最大的古城堡建築群，面積近7萬平方米。自9世紀起就是捷克國王的居所，現今仍是總統府所在地。",
+        lat: 50.0911,
+        lng: 14.4015,
+        description: "全球最大的古城堡建築群，面積近7萬平方米。自9世紀起就是捷克國王的居所。",
         highlights: [
             "聖維特大教堂 - 哥德式建築傑作，彩繪玻璃是慕夏作品",
             "舊皇宮 - 弗拉迪斯拉夫廳的拱頂令人驚嘆",
@@ -268,26 +451,63 @@ const ATTRACTIONS_DATA = [
         tips: {
             bestTime: "早上8點前入場，避開人潮",
             duration: "至少4-5小時",
-            tickets: "Circuit B €16 (大教堂+舊皇宮+黃金巷)",
+            tickets: "Circuit B €16",
             booking: "領隊已安排團體票",
             photo: "從城堡廣場拍攝大教堂正面"
         },
-        openingHours: "06:00 - 22:00 (景點09:00-17:00)",
+        openingHours: "06:00-22:00",
         location: "Hradčany, 119 08 Praha 1",
-        howToGet: "地鐵A線 Malostranská 站，再步行上坡"
+        howToGet: "地鐵A線 Malostranská 站，再步行上坡",
+        secrets: {
+            bestSpots: [
+                "📸 城堡廣場拍聖維特大教堂正面，早晨光線最好",
+                "🌅 城堡後方的星巴克有絕佳觀景台，免費！",
+                "🌉 傍晚去城堡區，可以同時看到日景和夜景",
+                "🏠 黃金巷最裡面的16號，是卡夫卡住過的房子"
+            ],
+            avoid: [
+                "❌ 10:00-14:00是死亡時段，人擠人",
+                "❌ 黃金巷如果排隊很長，可以略過",
+                "❌ 舊皇宮內部其實沒有很驚豔，時間不夠可以skip",
+                "❌ 城堡區的餐廳都是觀光客價"
+            ],
+            localTips: [
+                "💡 Circuit B 門票就夠了（大教堂+舊皇宮+黃金巷）",
+                "💡 早上8點前到，可以拍到沒人的大教堂",
+                "💡 城堡區星巴克二樓是免費觀景台，view超棒",
+                "💡 衛兵交接中午12點，提早15分鐘卡位",
+                "💡 城堡區很大，穿舒服的鞋子",
+                "💡 如果想省錢，只逛免費的城堡廣場就夠美了"
+            ],
+            photoGuide: [
+                "📷 城堡廣場正中間，大教堂當背景",
+                "📷 星巴克觀景台拍布拉格紅屋頂",
+                "📷 黃金巷的彩色小屋",
+                "📷 傍晚從城堡拍夕陽下的布拉格",
+                "📷 聖維特大教堂內部的彩繪玻璃（抬頭拍）"
+            ],
+            moneySaving: [
+                "💰 城堡廣場免費進入，景色就夠美",
+                "💰 黃金巷下午5點後免費進入（但商店關了）",
+                "💰 學生票半價，記得帶學生證",
+                "💰 城堡區的星巴克是觀景台，不用買觀景台門票"
+            ]
+        }
     },
     {
         id: "charles-bridge",
-        name: "查理大橋 (Charles Bridge)",
+        name: "查理大橋",
         city: "布拉格",
         country: "czech",
         icon: "🌉",
-        description: "連接布拉格老城與小城的14世紀石橋，長516米，兩側有30座巴洛克聖徒雕像。是布拉格最浪漫的地標。",
+        lat: 50.0865,
+        lng: 14.4116,
+        description: "連接布拉格老城與小城的14世紀石橋，長516米，兩側有30座巴洛克聖徒雕像。",
         highlights: [
             "聖約翰雕像 - 摸底座會帶來好運",
             "橋頭塔樓 - 可登頂看日出",
-            "街頭藝人 - 現場音樂與畫作",
-            "30座雕像 - 每座都有故事"
+            "街頭藝人",
+            "30座雕像"
         ],
         tips: {
             bestTime: "清晨6-7點或晚上10點後，避開白天擁擠",
@@ -298,170 +518,102 @@ const ATTRACTIONS_DATA = [
         },
         openingHours: "24小時開放",
         location: "Karlův most, 110 00 Praha 1",
-        howToGet: "地鐵A線 Staroměstská 站"
+        howToGet: "地鐵A線 Staroměstská 站",
+        secrets: {
+            bestSpots: [
+                "📸 清晨6點的查理大橋，幾乎沒人，包場的感覺",
+                "🌅 橋頭塔樓可以上去，看日出絕美",
+                "✨ 聖約翰雕像底座，摸十字架會帶來好運（左邊第8座）",
+                "🌉 從Legií橋拍查理大橋全景，經典明信片角度",
+                "🌙 晚上10點後，橋上只剩街燈和浪漫"
+            ],
+            avoid: [
+                "❌ 9:00-19:00根本是沙丁魚罐頭，寸步難行",
+                "❌ 橋上的街頭藝人表演其實還好，不用擠過去看",
+                "❌ 橋上的畫家會一直招攬，不理他們就好",
+                "❌ 橋兩端的紀念品店又貴又雷"
+            ],
+            localTips: [
+                "💡 早起！早上6-7點是魔法時刻",
+                "💡 拍查理大橋全景要去Legií橋或Mánes橋",
+                "💡 橋上的雕像都被摸得發亮，找個沒人的拍",
+                "💡 從小城區往老城區走，逆著人流比較好",
+                "💡 冬天早上去可能結霜，超級夢幻"
+            ],
+            photoGuide: [
+                "📷 Legií橋上拍查理大橋全景（早上順光）",
+                "📷 橋頭塔樓上俯拍橋面",
+                "📷 橋上拍布拉格城堡背景",
+                "📷 清晨的霧氣中的橋，電影感滿滿",
+                "📷 夜晚的街燈下的橋，浪漫至極"
+            ],
+            moneySaving: [
+                "💰 完全免費，24小時開放",
+                "💰 橋頭塔樓登頂約 €5，值得付",
+                "💰 不要在橋上買任何東西"
+            ]
+        }
     },
     {
         id: "old-town-square",
-        name: "老城廣場 (Old Town Square)",
+        name: "老城廣場",
         city: "布拉格",
         country: "czech",
         icon: "⛲",
+        lat: 50.0875,
+        lng: 14.4212,
         description: "布拉格的心臟地帶，周圍環繞著哥德式、巴洛克式、羅馬式建築。天文鐘是必看亮點。",
         highlights: [
-            "布拉格天文鐘 - 整點報時，十二使徒現身",
+            "布拉格天文鐘 - 整點報時",
             "泰恩教堂 - 雙塔黑影是布拉格地標",
-            "胡斯紀念碑 - 紀念宗教改革先驅",
-            "聖尼古拉教堂 - 巴洛克華麗內飾"
+            "胡斯紀念碑",
+            "聖尼古拉教堂"
         ],
         tips: {
             bestTime: "整點前5分鐘到天文鐘前卡位",
             duration: "1-2小時",
-            tickets: "廣場免費，教堂登塔約 €10",
+            tickets: "廣場免費",
             booking: "無需預約",
             photo: "泰恩教堂與胡斯紀念碑是經典構圖"
         },
         openingHours: "24小時開放",
         location: "Staroměstské náměstí, 110 00 Praha 1",
-        howToGet: "地鐵A線 Staroměstská 站"
-    },
-    
-    // ===== 捷克 - 庫倫洛夫 =====
-    {
-        id: "cesky-krumlov-castle",
-        name: "庫倫洛夫城堡 (Český Krumlov Castle)",
-        city: "庫倫洛夫",
-        country: "czech",
-        icon: "🏰",
-        description: "捷克第二大城堡群， UNESCO世界文化遺產。彩繪塔是庫倫洛夫的標誌，俯瞰紅屋頂小鎮與伏爾塔瓦河彎。",
-        highlights: [
-            "彩繪塔 - 粉紅與綠色的文藝復興塔樓",
-            "城堡劇場 - 保存完整的巴洛克劇場",
-            "城堡花園 - 法式庭園與噴泉",
-            "觀景台 - 絕美小鎮全景"
-        ],
-        tips: {
-            bestTime: "下午光線柔和",
-            duration: "2-3小時",
-            tickets: "城堡區免費，導覽約 €10",
-            booking: "領隊安排",
-            photo: "彩繪塔與小鎮全景"
-        },
-        openingHours: "09:00-17:00",
-        location: "Zámek 59, 381 01 Český Krumlov",
-        howToGet: "步行上山"
-    },
-    
-    // ===== 德國 - 國王湖 =====
-    {
-        id: "konigssee",
-        name: "國王湖 (Königssee)",
-        city: "貝希特斯加登",
-        country: "germany",
-        icon: "🏔️",
-        description: "德國最美的高山湖泊，被阿爾卑斯山環抱。湖水清澈見底，電動船遊覽是必體驗。",
-        highlights: [
-            "聖巴多羅買教堂 - 紅頂洋蔥教堂",
-            "Obersee湖 - 更上游的秘境",
-            "回音壁 - 船夫吹奏小號示範",
-            "瓦茨曼山 - 德國第二高峰"
-        ],
-        tips: {
-            bestTime: "上午湖面平靜，倒影清晰",
-            duration: "船程+徒步約4-5小時",
-            tickets: "來回船票 €22",
-            booking: "領隊已安排",
-            photo: "紅頂教堂與湖山倒影"
-        },
-        openingHours: "08:00-17:00（依季節調整）",
-        location: "Seestraße 3, 83471 Schönau am Königssee",
-        howToGet: "團體巴士直達"
-    },
-    
-    // ===== 奧地利 - 薩爾斯堡 =====
-    {
-        id: "salzburg-fortress",
-        name: "薩爾斯堡要塞 (Hohensalzburg Fortress)",
-        city: "薩爾斯堡",
-        country: "austria",
-        icon: "🏰",
-        description: "歐洲保存最完整的中世紀要塞，建於11世紀。搭乘纜車上山，可俯瞰整個薩爾斯堡與阿爾卑斯山。",
-        highlights: [
-            "黃金大廳 - 金色裝飾的宴會廳",
-            "要塞博物館 - 中世紀武器與生活",
-            "觀景台 - 360度山景",
-            "纜車 - 最陡的纜車之一"
-        ],
-        tips: {
-            bestTime: "下午或傍晚",
-            duration: "2-3小時",
-            tickets: "含纜車約 €15",
-            booking: "領隊安排",
-            photo: "俯瞰薩爾斯堡市區"
-        },
-        openingHours: "09:00-19:00",
-        location: "Mönchsberg 34, 5020 Salzburg",
-        howToGet: "要塞纜車 Festungsgasse"
-    },
-    {
-        id: "mozart-house",
-        name: "莫札特故居 (Mozart's Birthplace)",
-        city: "薩爾斯堡",
-        country: "austria",
-        icon: "🎵",
-        description: "1756年莫札特出生的房子，現在是博物館。展示莫札特用過的樂器、手稿與個人物品。",
-        highlights: [
-            "童年小提琴 - 莫札特用過的樂器",
-            "手稿 - 珍貴的作曲草稿",
-            "家庭房間 - 18世紀的居家生活",
-            "黃色外牆 - 糧食胡同9號"
-        ],
-        tips: {
-            bestTime: "上午",
-            duration: "1小時",
-            tickets: "約 €12",
-            booking: "領隊安排",
-            photo: "糧食胡同外觀"
-        },
-        openingHours: "09:00-17:30",
-        location: "Getreidegasse 9, 5020 Salzburg",
-        howToGet: "步行前往糧食胡同"
-    },
-    
-    // ===== 奧地利 - 哈修塔特 =====
-    {
-        id: "hallstatt",
-        name: "哈修塔特湖區 (Hallstatt)",
-        city: "哈修塔特",
-        country: "austria",
-        icon: "🏔️",
-        description: "世界文化遺產，被譽為「世界最美小鎮」。依山傍水，傳統木屋與教堂倒映在湖面上，如詩如畫。",
-        highlights: [
-            "明信片角度 - 經典拍照點",
-            "鹽礦 - 世界上最古老的鹽礦",
-            "天空步道 - 懸空觀景台",
-            "骨頭教堂 - 600顆彩繪頭骨"
-        ],
-        tips: {
-            bestTime: "早上9點前人少",
-            duration: "3-4小時",
-            tickets: "小鎮免費，鹽礦 €34",
-            booking: "自由活動",
-            photo: "明信片角度（北邊路口）"
-        },
-        openingHours: "24小時",
-        location: "Hallstatt, Austria",
-        howToGet: "團體巴士直達"
+        howToGet: "地鐵A線 Staroměstská 站",
+        secrets: {
+            bestSpots: [
+                "📸 天文鐘正對面的咖啡廳二樓，可以邊喝咖啡邊看報時",
+                "⛪ 泰恩教堂後方的小路，可以拍到教堂倒影",
+                "🎄 如果12月來，聖誕市集超級夢幻",
+                "☕ 廣場周邊的Terasa U Prince頂樓，拍廣場全景"
+            ],
+            avoid: [
+                "❌ 整點報時前15分鐘，天文鐘前擠到爆",
+                "❌ 廣場上的泡泡藝人會跟你要錢，拍了他們的泡泡就要給",
+                "❌ 周邊餐廳都是觀光客價，走遠一點吃",
+                "❌ 街頭的「古典音樂會」推銷，品質參差不齊"
+            ],
+            localTips: [
+                "💡 天文鐘報時其實很短（2分鐘），不必太期待",
+                "💡 清晨6點的廣場沒人，可以拍到乾淨的畫面",
+                "💡 從火藥塔往廣場走，視覺衝擊很大",
+                "💡 廣場周圍的小巷子裡藏了很多好餐廳",
+                "💡 泰恩教堂可以免費進入（部分區域）"
+            ],
+            photoGuide: [
+                "📷 廣場中央拍泰恩教堂對稱構圖",
+                "📷 天文鐘細節（十二星座環）",
+                "📷 U Prince頂樓拍廣場全景",
+                "📷 清晨的廣場，石板路反光",
+                "📷 夜晚燈光下的泰恩教堂"
+            ],
+            moneySaving: [
+                "💰 廣場完全免費逛",
+                "💰 天文鐘報時免費看",
+                "💰 走到周邊巷子裡吃飯，省30-50%"
+            ]
+        }
     }
 ];
-
-// 景點搜尋功能
-function searchAttractions(keyword) {
-    return ATTRACTIONS_DATA.filter(attraction => 
-        attraction.name.toLowerCase().includes(keyword.toLowerCase()) ||
-        attraction.city.toLowerCase().includes(keyword.toLowerCase()) ||
-        attraction.description.toLowerCase().includes(keyword.toLowerCase())
-    );
-}
 
 // 依國家篩選
 function getAttractionsByCountry(country) {
