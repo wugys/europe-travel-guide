@@ -670,8 +670,20 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
         
+        // 14. Initialize i18n (v3.0)
+        if (typeof i18n !== 'undefined') {
+            await i18n.init();
+            console.log('✅ i18n initialized');
+        }
+        
+        // 15. Initialize User Profile (v3.0)
+        if (typeof userProfile !== 'undefined') {
+            await userProfile.init();
+            console.log('✅ UserProfile initialized');
+        }
+        
         AppState.initialized = true;
-        console.log('✅ Europe Travel Guide v2.2 ready');
+        console.log('✅ Europe Travel Guide v3.0 ready');
         
     } catch (error) {
         console.error('❌ Initialization error:', error);
