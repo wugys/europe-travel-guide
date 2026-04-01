@@ -4,6 +4,18 @@
  */
 
 // ============================================
+// GLOBAL ERROR HANDLING
+// ============================================
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('[Global Error]', msg, 'at', url + ':' + lineNo);
+    return false;
+};
+
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('[Unhandled Promise Rejection]', event.reason);
+});
+
+// ============================================
 // APP STATE
 // ============================================
 const AppState = {
@@ -14,7 +26,8 @@ const AppState = {
     aiCardOpen: false,
     mapFollowUser: false,
     remindersEnabled: true,
-    aiSuggestion: null
+    aiSuggestion: null,
+    initialized: false
 };
 
 // 常數
@@ -31,6 +44,8 @@ const STORES = {
 // NAVIGATION
 // ============================================
 function navigateTo(page) {
+    console.log('[Navigate] Navigating to:', page);
+    
     // Hide all pages
     document.querySelectorAll('.page').forEach(p => {
         p.classList.remove('active');
@@ -41,6 +56,9 @@ function navigateTo(page) {
     if (targetPage) {
         targetPage.classList.add('active');
         AppState.currentPage = page;
+    } else {
+        console.error('[Navigate] Page not found:', `page-${page}`);
+        return;
     }
     
     // Update bottom nav
@@ -60,10 +78,15 @@ function navigateTo(page) {
     // Special handling for map page
     if (page === 'map') {
         setTimeout(() => {
-            MapModule.init('map-container');
+            if (typeof MapModule !== 'undefined') {
+                MapModule.init('map-container');
+            }
         }, 100);
     }
 }
+
+// Expose to global scope for HTML onclick handlers
+window.navigateTo = navigateTo;
 
 function updateBottomNav(page) {
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -568,51 +591,93 @@ function truncateText(text, maxLength) {
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('✨ Europe Travel Guide v2.2 initializing...');
     
-    // 1. Initialize offline module (PWA + Service Worker)
-    await OfflineModule.init();
-    
-    // 2. Initialize database
-    await travelDB.init();
-    await travelDB.initializeData();
-    
-    // 3. Initialize AI Guide
-    await AIGuide.init();
-    
-    // 4. Initialize time display
-    TimeModule.init();
-    
-    // 5. Initialize GPS
-    await GPS.init();
-    
-    // 6. Initialize reminders
-    await ReminderSystem.init();
-    
-    // 7. Load favorites
-    const favorites = await travelDB.getAllFavorites();
-    AppState.favorites = favorites.map(f => f.attractionId);
-    
-    // 8. Load initial page data
-    loadHomeData();
-    
-    // 9. Start GPS tracking
-    GPS.startTracking();
-    
-    // 10. Request notification permission
-    if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
+    try {
+        // 1. Initialize offline module (PWA + Service Worker)
+        if (typeof OfflineModule !== 'undefined') {
+            await OfflineModule.init();
+            console.log('✅ OfflineModule initialized');
+        }
+        
+        // 2. Initialize database
+        if (typeof travelDB !== 'undefined') {
+            await travelDB.init();
+            await travelDB.initializeData();
+            console.log('✅ Database initialized');
+        }
+        
+        // 3. Initialize AI Guide
+        if (typeof AIGuide !== 'undefined') {
+            await AIGuide.init();
+            console.log('✅ AIGuide initialized');
+        }
+        
+        // 4. Initialize AI Router (v3.0)
+        if (typeof AIRouter !== 'undefined') {
+            console.log('✅ AIRouter loaded');
+        }
+        
+        // 5. Initialize time display
+        if (typeof TimeModule !== 'undefined') {
+            TimeModule.init();
+            console.log('✅ TimeModule initialized');
+        }
+        
+        // 6. Initialize GPS
+        if (typeof GPS !== 'undefined') {
+            await GPS.init();
+            console.log('✅ GPS initialized');
+        }
+        
+        // 7. Initialize reminders
+        if (typeof ReminderSystem !== 'undefined') {
+            await ReminderSystem.init();
+            console.log('✅ ReminderSystem initialized');
+        }
+        
+        // 8. Load favorites
+        if (typeof travelDB !== 'undefined') {
+            const favorites = await travelDB.getAllFavorites();
+            AppState.favorites = favorites.map(f => f.attractionId);
+            console.log('✅ Favorites loaded:', AppState.favorites.length);
+        }
+        
+        // 9. Load initial page data
+        loadHomeData();
+        
+        // 10. Start GPS tracking
+        if (typeof GPS !== 'undefined') {
+            GPS.startTracking();
+        }
+        
+        // 11. Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+        
+        // 12. Listen for AI suggestions
+        window.addEventListener('ai:suggestion', (e) => {
+            AppState.aiSuggestion = e.detail;
+            updateAIGuideCard(e.detail);
+        });
+        
+        // 13. Get initial AI suggestion
+        if (typeof AIGuide !== 'undefined') {
+            try {
+                const initialSuggestion = await AIGuide.getCurrentSuggestion();
+                updateAIGuideCard(initialSuggestion);
+            } catch (e) {
+                console.warn('Could not get initial AI suggestion:', e);
+            }
+        }
+        
+        AppState.initialized = true;
+        console.log('✅ Europe Travel Guide v2.2 ready');
+        
+    } catch (error) {
+        console.error('❌ Initialization error:', error);
+        // Even if some modules fail, we can still show the basic UI
+        loadHomeData();
     }
-    
-    // 11. Listen for AI suggestions
-    window.addEventListener('ai:suggestion', (e) => {
-        AppState.aiSuggestion = e.detail;
-        updateAIGuideCard(e.detail);
-    });
-    
-    // 12. Get initial AI suggestion
-    const initialSuggestion = await AIGuide.getCurrentSuggestion();
-    updateAIGuideCard(initialSuggestion);
-    
-    console.log('✅ Europe Travel Guide v2.2 ready');
 });
 
 // Handle browser back button
@@ -694,3 +759,13 @@ async function completeActivity(activityId) {
         updateAIGuideCard(suggestion);
     }
 }
+
+// ============================================
+// GLOBAL EXPORTS (for HTML onclick handlers)
+// ============================================
+window.toggleAiCard = toggleAiCard;
+window.toggleFavorite = toggleFavorite;
+window.speakAIGuide = speakAIGuide;
+window.completeActivity = completeActivity;
+window.updateBottomNav = updateBottomNav;
+window.loadPageData = loadPageData;
