@@ -53,13 +53,24 @@
                 <div class="ai-guide-header">
                     <div class="ai-avatar">🎯</div>
                     <div class="ai-title">AI 導遊建議</div>
+                    <button class="ai-speak-btn" onclick="speakAIGuide()" title="語音播報">🔊</button>
                 </div>
                 <div class="ai-content">
-                    <p class="ai-now">現在：抵達布達佩斯機場，準備入境</p>
-                    <p class="ai-next">下一步：領取行李，前往酒店</p>
-                    <div class="ai-reminder">
-                        <span class="reminder-icon">💡</span>
-                        <span>別忘了在機場換一點福林現金</span>
+                    <div class="ai-item">
+                        <span class="ai-label">現在建議</span>
+                        <p class="ai-now">AI導遊計算中...</p>
+                    </div>
+                    <div class="ai-item">
+                        <span class="ai-label">下一步</span>
+                        <p class="ai-next">-</p>
+                    </div>
+                    <div class="ai-warning" style="display: none;">
+                        <span class="warning-icon">⚠️</span>
+                        <span>-</span>
+                    </div>
+                    <div class="ai-contact" style="display: none;">
+                        <span class="contact-icon">📞</span>
+                        <span>-</span>
                     </div>
                 </div>
             </div>
@@ -282,11 +293,11 @@
                     <h3 class="section-label">關於</h3>
                     <div class="setting-item">
                         <span class="setting-name">版本</span>
-                        <span class="setting-value">v2.1 PWA版</span>
+                        <span class="setting-value">v2.2 AI版</span>
                     </div>
                     <div class="setting-item">
                         <span class="setting-name">功能</span>
-                        <span class="setting-value">離線+GPS+提醒</span>
+                        <span class="setting-value">離線+GPS+AI導遊</span>
                     </div>
                 </div>
                 
@@ -298,6 +309,8 @@
                         <li>✓ 互動式地圖</li>
                         <li>✓ 智能提醒系統</li>
                         <li>✓ 雙時區時間顯示</li>
+                        <li>✓ AI 導遊建議 (規則引擎)</li>
+                        <li>✓ 語音導覽 (Web Speech API)</li>
                     </ul>
                 </div>
             </div>
@@ -314,20 +327,25 @@
             <div class="ai-card-header">
                 <span class="ai-card-icon">🎯</span>
                 <span class="ai-card-title">AI 導遊</span>
+                <button class="ai-speak-btn" onclick="speakAIGuide()" title="語音播報">🔊</button>
                 <button class="ai-card-close" onclick="toggleAiCard()">×</button>
             </div>
             <div class="ai-card-content">
                 <div class="ai-suggestion">
                     <div class="suggestion-label">現在建議</div>
-                    <p>抵達布達佩斯機場，準備入境手續</p>
+                    <p>-</p>
                 </div>
                 <div class="ai-suggestion">
                     <div class="suggestion-label">下一步</div>
-                    <p>領取行李後，在出口與領隊會合</p>
+                    <p>-</p>
                 </div>
                 <div class="ai-suggestion reminder">
-                    <div class="suggestion-label">提醒</div>
-                    <p>別忘了在機場換一點福林現金備用</p>
+                    <div class="suggestion-label">注意事項</div>
+                    <p>-</p>
+                </div>
+                <div class="ai-suggestion contact">
+                    <div class="suggestion-label">聯繫台北</div>
+                    <p>-</p>
                 </div>
             </div>
         </div>
@@ -377,6 +395,7 @@
     <script src="js/modules/map.js"></script>
     <script src="js/modules/time.js"></script>
     <script src="js/modules/reminder.js"></script>
+    <script src="js/modules/ai-guide.js"></script>
     
     <!-- ==================== APP SCRIPT ==================== -->
     <script src="js/app.js"></script>

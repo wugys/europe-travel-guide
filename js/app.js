@@ -1,6 +1,6 @@
 /**
- * Europe Travel Guide v2.1
- * PWA + Offline + GPS + Reminders
+ * Europe Travel Guide v2.2
+ * PWA + Offline + GPS + Reminders + AI Guide
  */
 
 // ============================================
@@ -13,7 +13,8 @@ const AppState = {
     favorites: [],
     aiCardOpen: false,
     mapFollowUser: false,
-    remindersEnabled: true
+    remindersEnabled: true,
+    aiSuggestion: null
 };
 
 // 常數
@@ -565,36 +566,53 @@ function truncateText(text, maxLength) {
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log('✨ Europe Travel Guide v2.1 initializing...');
+    console.log('✨ Europe Travel Guide v2.2 initializing...');
     
     // 1. Initialize offline module (PWA + Service Worker)
     await OfflineModule.init();
     
-    // 2. Initialize time display
+    // 2. Initialize database
+    await travelDB.init();
+    await travelDB.initializeData();
+    
+    // 3. Initialize AI Guide
+    await AIGuide.init();
+    
+    // 4. Initialize time display
     TimeModule.init();
     
-    // 3. Initialize GPS
+    // 5. Initialize GPS
     await GPS.init();
     
-    // 4. Initialize reminders
+    // 6. Initialize reminders
     await ReminderSystem.init();
     
-    // 5. Load favorites
+    // 7. Load favorites
     const favorites = await travelDB.getAllFavorites();
     AppState.favorites = favorites.map(f => f.attractionId);
     
-    // 6. Load initial page data
+    // 8. Load initial page data
     loadHomeData();
     
-    // 7. Start GPS tracking
+    // 9. Start GPS tracking
     GPS.startTracking();
     
-    // 8. Request notification permission
+    // 10. Request notification permission
     if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
     }
     
-    console.log('✅ Europe Travel Guide v2.1 ready');
+    // 11. Listen for AI suggestions
+    window.addEventListener('ai:suggestion', (e) => {
+        AppState.aiSuggestion = e.detail;
+        updateAIGuideCard(e.detail);
+    });
+    
+    // 12. Get initial AI suggestion
+    const initialSuggestion = await AIGuide.getCurrentSuggestion();
+    updateAIGuideCard(initialSuggestion);
+    
+    console.log('✅ Europe Travel Guide v2.2 ready');
 });
 
 // Handle browser back button
@@ -603,3 +621,76 @@ window.addEventListener('popstate', function(e) {
         navigateTo('home');
     }
 });
+
+// ============================================
+// AI GUIDE UI UPDATES
+// ============================================
+function updateAIGuideCard(suggestion) {
+    if (!suggestion) return;
+    
+    // Update home page AI card
+    const aiNow = document.querySelector('.ai-now');
+    const aiNext = document.querySelector('.ai-next');
+    const aiWarning = document.querySelector('.ai-warning');
+    const aiContact = document.querySelector('.ai-contact');
+    
+    if (aiNow) aiNow.textContent = suggestion.action || 'AI導遊計算中...';
+    if (aiNext) aiNext.textContent = suggestion.next || '';
+    
+    // Show warning if exists
+    if (aiWarning) {
+        if (suggestion.warning) {
+            aiWarning.style.display = 'flex';
+            aiWarning.querySelector('span:last-child').textContent = suggestion.warning;
+        } else {
+            aiWarning.style.display = 'none';
+        }
+    }
+    
+    // Show contact status
+    if (aiContact) {
+        if (suggestion.contactTaiwan) {
+            aiContact.style.display = 'flex';
+            aiContact.querySelector('span:last-child').textContent = suggestion.contactTaiwan;
+        } else {
+            aiContact.style.display = 'none';
+        }
+    }
+    
+    // Update AI popup card
+    const popup = document.getElementById('ai-card-popup');
+    if (popup) {
+        const suggestionDivs = popup.querySelectorAll('.ai-suggestion');
+        if (suggestionDivs[0] && suggestion.action) {
+            suggestionDivs[0].querySelector('p').textContent = suggestion.action;
+        }
+        if (suggestionDivs[1] && suggestion.next) {
+            suggestionDivs[1].querySelector('p').textContent = suggestion.next;
+        }
+        if (suggestionDivs[2]) {
+            const warningText = suggestion.warning || suggestion.alternative || '行程進行中';
+            suggestionDivs[2].querySelector('p').textContent = warningText;
+        }
+        // Add contact info if available
+        if (suggestionDivs[3] && suggestion.contactTaiwan) {
+            suggestionDivs[3].querySelector('p').textContent = suggestion.contactTaiwan;
+        }
+    }
+}
+
+// Speak current AI suggestion
+function speakAIGuide() {
+    if (AIGuide && AIGuide.speakCurrentSuggestion) {
+        AIGuide.speakCurrentSuggestion();
+    }
+}
+
+// Mark activity as complete
+async function completeActivity(activityId) {
+    if (AIGuide && AIGuide.markActivityComplete) {
+        await AIGuide.markActivityComplete(activityId);
+        // Refresh suggestion
+        const suggestion = await AIGuide.evaluateAndSuggest(true);
+        updateAIGuideCard(suggestion);
+    }
+}
