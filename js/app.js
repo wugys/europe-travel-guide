@@ -2,13 +2,27 @@
  * Europe Travel Guide v3.0 Batch 2
  * TravelMind AI - 隨行智遊
  * PWA + Offline + GPS + AI Guide + Trip Planner + Content Engine
+ * Build: 2026-04-02-v3.0.1
  */
+
+// ============================================
+// DEBUG MODE & VERSION
+// ============================================
+window.APP_DEBUG = true;
+window.APP_VERSION = 'v3.0.1';
+window.BUILD_TIME = '2026-04-02-1830';
+
+console.log('[APP] ====== STARTING ======');
+console.log('[APP] Version:', window.APP_VERSION);
+console.log('[APP] Build:', window.BUILD_TIME);
+console.log('[APP] Time:', new Date().toISOString());
 
 // ============================================
 // GLOBAL ERROR HANDLING
 // ============================================
 window.onerror = function(msg, url, lineNo, columnNo, error) {
     console.error('[Global Error]', msg, 'at', url + ':' + lineNo);
+    console.error('[Global Error] Stack:', error?.stack);
     return false;
 };
 
@@ -40,6 +54,17 @@ const STORES = {
     USER_STATE: 'userState',
     OFFLINE_TILES: 'offlineTiles'
 };
+
+// ============================================
+// DOM READY GUARANTEE
+// ============================================
+function onDOMReady(callback) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', callback);
+    } else {
+        callback();
+    }
+}
 
 // ============================================
 // NAVIGATION
@@ -79,8 +104,10 @@ function navigateTo(page) {
     // Special handling for map page
     if (page === 'map') {
         setTimeout(() => {
-            if (typeof MapModule !== 'undefined') {
+            if (typeof MapModule !== 'undefined' && MapModule.init) {
                 MapModule.init('map-container');
+            } else {
+                console.error('[Navigate] MapModule not available');
             }
         }, 100);
     }

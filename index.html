@@ -34,7 +34,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/app.css?v=36">
+    <link rel="stylesheet" href="css/app.css?v=3.0.1">
     
     <!-- ==================== EMERGENCY FIX (Load First) ==================== -->
     <script>
@@ -42,12 +42,109 @@
     (function() {
         'use strict';
         
+        // Debug Mode
+        window.APP_DEBUG = true;
+        window.APP_VERSION = 'v3.0.1';
+        window.BUILD_TIME = '2026-04-02-1830';
+        
+        // Error Tracking
+        window.appErrors = [];
+        window.addEventListener('error', function(e) {
+            console.error('[APP ERROR]', e.message, e.filename, e.lineno);
+            window.appErrors.push({
+                message: e.message,
+                file: e.filename,
+                line: e.lineno,
+                time: new Date().toISOString()
+            });
+            updateFallbackStatus('發生錯誤: ' + e.message);
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('[APP REJECTION]', e.reason);
+            window.appErrors.push({
+                message: String(e.reason),
+                type: 'unhandledrejection',
+                time: new Date().toISOString()
+            });
+        });
+        
+        function updateFallbackStatus(msg) {
+            const el = document.getElementById('fallback-status');
+            if (el) el.textContent = msg;
+        }
+        
+        function hideFallback() {
+            const el = document.getElementById('loading-fallback');
+            if (el) el.classList.add('hidden');
+        }
+        
         // 核心導航函數
         window.navigateTo = function(page) {
             console.log('[Navigate] To:', page);
             
             // 隱藏所有頁面
             document.querySelectorAll('.page').forEach(function(p) {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+            
+            // 顯示目標頁面
+            var target = document.getElementById('page-' + page);
+            if (target) {
+                target.classList.add('active');
+                target.style.display = 'block';
+            }
+            
+            // 更新底部導航
+            document.querySelectorAll('.nav-item').forEach(function(item) {
+                item.classList.remove('active');
+                if (item.dataset.page === page) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 更新標題
+            var titles = {
+                'home': 'TravelMind AI | 隨行智遊',
+                'today': '今日行程 | TravelMind',
+                'map': '地圖 | TravelMind',
+                'attractions': '景點 | TravelMind',
+                'attraction-detail': '景點詳情 | TravelMind',
+                'favorites': '收藏 | TravelMind',
+                'settings': '設定 | TravelMind'
+            };
+            document.title = titles[page] || 'TravelMind AI';
+            
+            // 觸發頁面載入事件
+            if (window.loadPageData) {
+                window.loadPageData(page);
+            }
+            
+            return false;
+        };
+        
+        // 其他必要函數
+        window.toggleAiCard = function() {
+            var card = document.querySelector('.ai-guide-card, .ai-card-popup');
+            if (card) {
+                card.classList.toggle('expanded');
+                card.style.display = card.style.display === 'none' ? 'block' : 'none';
+            }
+        };
+        
+        window.speakAIGuide = function() {
+            console.log('[TTS] Speak guide');
+            if (window.speechSynthesis) {
+                var msg = new SpeechSynthesisUtterance('AI 導遊建議');
+                msg.lang = 'zh-TW';
+                window.speechSynthesis.speak(msg);
+            }
+        };
+        
+        console.log('[APP] Emergency functions loaded v3.0.1');
+    })();
+    </script>
                 p.classList.remove('active');
                 p.style.display = 'none';
             });
@@ -437,7 +534,7 @@
                     <h3 class="section-label">關於</h3>
                     <div class="setting-item">
                         <span class="setting-name">版本</span>
-                        <span class="setting-value">v3.0 Batch 2</span>
+                        <span class="setting-value">v3.0.1 (Build 20260402)</span>
                     </div>
                     <div class="setting-item">
                         <span class="setting-name">功能</span>
@@ -528,31 +625,77 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     
     <!-- ==================== DATA SCRIPTS ==================== -->
-    <script src="data/trip-info.js?v=36"></script>
-    <script src="data/itinerary.js?v=36"></script>
-    <script src="data/attractions.js?v=36"></script>
+    <script src="data/trip-info.js?v=3.0.1"></script>
+    <script src="data/itinerary.js?v=3.0.1"></script>
+    <script src="data/attractions.js?v=3.0.1"></script>
     
     <!-- ==================== MODULES ==================== -->
-    <script src="js/modules/db.js?v=36"></script>
-    <script src="js/modules/offline.js?v=36"></script>
-    <script src="js/modules/gps.js?v=36"></script>
-    <script src="js/modules/map.js?v=36"></script>
-    <script src="js/modules/time.js?v=36"></script>
-    <script src="js/modules/reminder.js?v=36"></script>
-    <script src="js/modules/ai-guide.js?v=36"></script>
+    <script src="js/modules/db.js?v=3.0.1"></script>
+    <script src="js/modules/offline.js?v=3.0.1"></script>
+    <script src="js/modules/gps.js?v=3.0.1"></script>
+    <script src="js/modules/map.js?v=3.0.1"></script>
+    <script src="js/modules/time.js?v=3.0.1"></script>
+    <script src="js/modules/reminder.js?v=3.0.1"></script>
+    <script src="js/modules/ai-guide.js?v=3.0.1"></script>
     
     <!-- v3.0 New Modules -->
-    <script src="js/modules/i18n.js?v=36"></script>
-    <script src="js/modules/profile.js?v=36"></script>
-    <script src="js/modules/ai-router.js?v=36"></script>
+    <script src="js/modules/i18n.js?v=3.0.1"></script>
+    <script src="js/modules/profile.js?v=3.0.1"></script>
+    <script src="js/modules/ai-router.js?v=3.0.1"></script>
     
     <!-- v3.0 Batch 2 Modules -->
-    <script src="js/modules/planner.js?v=36"></script>
-    <script src="js/modules/content-engine.js?v=36"></script>
-    <script src="js/modules/cms-admin.js?v=36"></script>
+    <script src="js/modules/planner.js?v=3.0.1"></script>
+    <script src="js/modules/content-engine.js?v=3.0.1"></script>
+    <script src="js/modules/cms-admin.js?v=3.0.1"></script>
     
     <!-- ==================== APP SCRIPT ==================== -->
-    <script src="js/app.js?v=36"></script>
+    <script src="js/app.js?v=3.0.1"></script>
+    
+    <!-- ==================== SERVICE WORKER FORCE UPDATE ==================== -->
+    <script>
+    // 強制檢查並更新 Service Worker
+    (function() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                    console.log('[SW] Registered:', registration.scope);
+                    
+                    // 檢查更新
+                    registration.addEventListener('updatefound', function() {
+                        const newWorker = registration.installing;
+                        console.log('[SW] Update found!');
+                        
+                        newWorker.addEventListener('statechange', function() {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('[SW] New version available, reloading...');
+                                // 強制重新載入以使用新版本
+                                window.location.reload();
+                            }
+                        });
+                    });
+                    
+                    // 每 60 秒檢查一次更新
+                    setInterval(function() {
+                        registration.update();
+                        console.log('[SW] Checking for updates...');
+                    }, 60000);
+                })
+                .catch(function(err) {
+                    console.error('[SW] Registration failed:', err);
+                });
+            
+            // 監聽 SW 訊息
+            navigator.serviceWorker.addEventListener('message', function(event) {
+                console.log('[SW] Message:', event.data);
+                if (event.data.type === 'SW_UPDATED') {
+                    console.log('[SW] Updated to version:', event.data.version);
+                }
+            });
+        } else {
+            console.warn('[SW] Service Worker not supported');
+        }
+    })();
+    </script>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
