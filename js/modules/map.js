@@ -360,3 +360,6 @@ const MapModule = {
         return this.state.map;
     }
 };
+
+// 暴露到全域
+window.MapModule = MapModule;

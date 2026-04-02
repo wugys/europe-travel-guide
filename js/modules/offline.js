@@ -244,3 +244,6 @@ const OfflineModule = {
         }
     }
 };
+
+// 暴露到全域
+window.OfflineModule = OfflineModule;

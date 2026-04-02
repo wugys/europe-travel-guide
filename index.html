@@ -6,6 +6,12 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>TravelMind AI | 隨行智遊 v3.0</title>
     
     <!-- Google Fonts -->
@@ -14,7 +20,131 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/app.css?v=34">
+    <link rel="stylesheet" href="css/app.css?v=35">
+    
+    <!-- ==================== EMERGENCY FIX (Load First) ==================== -->
+    <script>
+    // 緊急修復：確保導航功能在任何模組之前可用
+    (function() {
+        'use strict';
+        
+        // 核心導航函數
+        window.navigateTo = function(page) {
+            console.log('[Navigate] To:', page);
+            
+            // 隱藏所有頁面
+            document.querySelectorAll('.page').forEach(function(p) {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+            
+            // 顯示目標頁面
+            var target = document.getElementById('page-' + page);
+            if (target) {
+                target.classList.add('active');
+                target.style.display = 'block';
+            }
+            
+            // 更新底部導航
+            document.querySelectorAll('.nav-item').forEach(function(item) {
+                item.classList.remove('active');
+                if (item.dataset.page === page) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 更新標題
+            var titles = {
+                'home': 'TravelMind AI | 隨行智遊',
+                'today': '今日行程 | TravelMind',
+                'map': '地圖 | TravelMind',
+                'attractions': '景點 | TravelMind',
+                'attraction-detail': '景點詳情 | TravelMind',
+                'favorites': '收藏 | TravelMind',
+                'settings': '設定 | TravelMind'
+            };
+            document.title = titles[page] || 'TravelMind AI';
+            
+            // 觸發頁面載入事件
+            if (window.loadPageData) {
+                window.loadPageData(page);
+            }
+            
+            return false;
+        };
+        
+        // 其他必要函數
+        window.toggleAiCard = function() {
+            var card = document.querySelector('.ai-guide-card');
+            if (card) {
+                card.classList.toggle('expanded');
+            }
+        };
+        
+        window.toggleFavorite = function(id) {
+            console.log('[Favorite] Toggle:', id);
+            // 簡易實作
+            var btn = document.querySelector('[data-attraction-id="' + id + '"] .favorite-btn');
+            if (btn) {
+                btn.classList.toggle('active');
+            }
+        };
+        
+        window.speakAIGuide = function() {
+            console.log('[TTS] Speak guide');
+            if (window.speechSynthesis) {
+                var msg = new SpeechSynthesisUtterance('AI 導遊建議');
+                msg.lang = 'zh-TW';
+                window.speechSynthesis.speak(msg);
+            }
+        };
+        
+        window.jumpToDay = function(day) {
+            console.log('[Jump] Day:', day);
+            window.navigateTo('today');
+            // 滾動到對應天數
+            var section = document.getElementById('day-' + day);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+        
+        // 綁定按鈕事件
+        function bindButtons() {
+            // 底部導航
+            document.querySelectorAll('.nav-item').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var page = this.dataset.page;
+                    if (page && window.navigateTo) {
+                        window.navigateTo(page);
+                    }
+                });
+            });
+            
+            // 功能按鈕
+            document.querySelectorAll('.quick-btn, .action-btn').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    if (!this.dataset.bound) {
+                        console.log('[Button] Clicked:', this.textContent);
+                        this.dataset.bound = 'true';
+                    }
+                });
+            });
+            
+            console.log('[Emergency] All buttons bound');
+        }
+        
+        // 立即綁定
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bindButtons);
+        } else {
+            bindButtons();
+        }
+        
+        console.log('[Emergency] Core functions loaded v35');
+    })();
+    </script>
 </head>
 <body>
     <!-- ==================== APP CONTAINER ==================== -->
@@ -384,86 +514,31 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     
     <!-- ==================== DATA SCRIPTS ==================== -->
-    <script src="data/trip-info.js?v=34"></script>
-    <script src="data/itinerary.js?v=34"></script>
-    <script src="data/attractions.js?v=34"></script>
+    <script src="data/trip-info.js?v=35"></script>
+    <script src="data/itinerary.js?v=35"></script>
+    <script src="data/attractions.js?v=35"></script>
     
     <!-- ==================== MODULES ==================== -->
-    <script src="js/modules/db.js?v=34"></script>
-    <script src="js/modules/offline.js?v=34"></script>
-    <script src="js/modules/gps.js?v=34"></script>
-    <script src="js/modules/map.js?v=34"></script>
-    <script src="js/modules/time.js?v=34"></script>
-    <script src="js/modules/reminder.js?v=34"></script>
-    <script src="js/modules/ai-guide.js?v=34"></script>
+    <script src="js/modules/db.js?v=35"></script>
+    <script src="js/modules/offline.js?v=35"></script>
+    <script src="js/modules/gps.js?v=35"></script>
+    <script src="js/modules/map.js?v=35"></script>
+    <script src="js/modules/time.js?v=35"></script>
+    <script src="js/modules/reminder.js?v=35"></script>
+    <script src="js/modules/ai-guide.js?v=35"></script>
     
     <!-- v3.0 New Modules -->
-    <script src="js/modules/i18n.js?v=34"></script>
-    <script src="js/modules/profile.js?v=34"></script>
-    <script src="js/modules/ai-router.js?v=34"></script>
+    <script src="js/modules/i18n.js?v=35"></script>
+    <script src="js/modules/profile.js?v=35"></script>
+    <script src="js/modules/ai-router.js?v=35"></script>
     
     <!-- v3.0 Batch 2 Modules -->
-    <script src="js/modules/planner.js?v=34"></script>
-    <script src="js/modules/content-engine.js?v=34"></script>
-    <script src="js/modules/cms-admin.js?v=34"></script>
+    <script src="js/modules/planner.js?v=35"></script>
+    <script src="js/modules/content-engine.js?v=35"></script>
+    <script src="js/modules/cms-admin.js?v=35"></script>
     
     <!-- ==================== APP SCRIPT ==================== -->
-    <script src="js/app.js?v=34"></script>
-    
-    <!-- ==================== EMERGENCY BUTTON FIX ==================== -->
-    <script>
-    // 緊急按鈕修復：確保即使主腳本失敗，導航仍能工作
-    (function() {
-        function emergencyNavigate(page) {
-            console.log('[Emergency] Navigating to:', page);
-            // 顯示對應頁面
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const targetPage = document.getElementById('page-' + page);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-            // 更新底部導航
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.dataset.page === page) {
-                    item.classList.add('active');
-                }
-            });
-            // 更新標題
-            const titles = {
-                'home': '首頁',
-                'today': '今日行程',
-                'map': '地圖',
-                'favorites': '收藏',
-                'settings': '設定'
-            };
-            document.title = titles[page] || 'Europe Travel';
-        }
-        
-        // 等待 DOM 載入
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', bindEmergencyButtons);
-        } else {
-            bindEmergencyButtons();
-        }
-        
-        function bindEmergencyButtons() {
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const page = this.dataset.page;
-                    if (page) {
-                        emergencyNavigate(page);
-                    }
-                });
-            });
-            console.log('[Emergency] Button bindings attached');
-        }
-        
-        // 暴露到全局
-        window.emergencyNavigate = emergencyNavigate;
-    })();
-    </script>
+    <script src="js/app.js?v=35"></script>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">

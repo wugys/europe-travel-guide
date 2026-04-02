@@ -246,3 +246,6 @@ const TimeModule = {
         }
     }
 };
+
+// 暴露到全域
+window.TimeModule = TimeModule;

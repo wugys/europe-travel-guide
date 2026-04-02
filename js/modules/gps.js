@@ -340,3 +340,6 @@ const GPS = {
         return distance < 20; // 20km 內視為在該城市
     }
 };
+
+// 暴露到全域
+window.GPS = GPS;

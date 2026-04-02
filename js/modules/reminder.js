@@ -491,3 +491,6 @@ const ReminderSystem = {
         });
     }
 };
+
+// 暴露到全域
+window.ReminderSystem = ReminderSystem;

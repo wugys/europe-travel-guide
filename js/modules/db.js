@@ -309,3 +309,4 @@ class TravelDatabase {
 
 // 建立全域實例
 const travelDB = new TravelDatabase();
+window.travelDB = travelDB;

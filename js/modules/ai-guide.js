@@ -755,3 +755,6 @@ const AIGuide = {
         }
     }
 };
+
+// 暴露到全域
+window.AIGuide = AIGuide;
