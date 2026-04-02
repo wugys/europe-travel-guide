@@ -1,6 +1,7 @@
 /**
- * Europe Travel Guide v2.2
- * PWA + Offline + GPS + Reminders + AI Guide
+ * Europe Travel Guide v3.0 Batch 2
+ * TravelMind AI - 隨行智遊
+ * PWA + Offline + GPS + AI Guide + Trip Planner + Content Engine
  */
 
 // ============================================
