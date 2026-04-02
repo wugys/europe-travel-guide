@@ -703,8 +703,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         // 17. Initialize enhanced AI Guide with LLM support
         initEnhancedAIGuide();
         
+        // 18. Initialize Trip Planner (v3.0 Batch 2)
+        if (typeof tripPlanner !== 'undefined') {
+            tripPlanner.init();
+            console.log('✅ TripPlanner initialized');
+        }
+        
+        // 19. Initialize Content Engine (v3.0 Batch 2)
+        if (typeof contentEngine !== 'undefined') {
+            await contentEngine.init();
+            console.log('✅ ContentEngine initialized');
+        }
+        
+        // 20. Initialize CMS Admin (v3.0 Batch 2)
+        if (typeof cmsAdmin !== 'undefined') {
+            await cmsAdmin.init();
+            console.log('✅ CMS Admin initialized');
+        }
+        
         AppState.initialized = true;
-        console.log('✅ Europe Travel Guide v3.0 ready');
+        console.log('✅ Europe Travel Guide v3.0 Batch 2 ready');
         
         // Bind bottom nav buttons explicitly
         bindBottomNavButtons();
