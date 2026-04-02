@@ -6,6 +6,43 @@
  */
 
 // ============================================
+// EMERGENCY FALLBACK - Must work even if everything else fails
+// ============================================
+window.navigateTo = function(page) {
+    var pages = document.querySelectorAll('.page');
+    for (var i = 0; i < pages.length; i++) {
+        pages[i].classList.remove('active');
+    }
+    var target = document.getElementById('page-' + page);
+    if (target) {
+        target.classList.add('active');
+        document.title = 'TravelMind AI | ' + page;
+    }
+    var navItems = document.querySelectorAll('.nav-item');
+    for (var i = 0; i < navItems.length; i++) {
+        navItems[i].classList.remove('active');
+        if (navItems[i].dataset.page === page) {
+            navItems[i].classList.add('active');
+        }
+    }
+};
+
+window.toggleAiCard = function() {
+    var card = document.getElementById('ai-card-popup');
+    if (card) {
+        card.style.display = card.style.display === 'block' ? 'none' : 'block';
+    }
+};
+
+window.speakAIGuide = function() {
+    if (window.speechSynthesis) {
+        var msg = new SpeechSynthesisUtterance('AI導遊建議');
+        msg.lang = 'zh-TW';
+        window.speechSynthesis.speak(msg);
+    }
+};
+
+// ============================================
 // DEBUG MODE & VERSION
 // ============================================
 window.APP_DEBUG = true;
@@ -15,14 +52,12 @@ window.BUILD_TIME = '2026-04-02-1830';
 console.log('[APP] ====== STARTING ======');
 console.log('[APP] Version:', window.APP_VERSION);
 console.log('[APP] Build:', window.BUILD_TIME);
-console.log('[APP] Time:', new Date().toISOString());
 
 // ============================================
 // GLOBAL ERROR HANDLING
 // ============================================
 window.onerror = function(msg, url, lineNo, columnNo, error) {
     console.error('[Global Error]', msg, 'at', url + ':' + lineNo);
-    console.error('[Global Error] Stack:', error?.stack);
     return false;
 };
 
